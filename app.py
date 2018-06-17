@@ -11,7 +11,7 @@ app = Flask(__name__)
 def get_image_text(url):
     image_data = requests.get(url)
     if image_data.status_code / 100 != 2:
-        log('Problems getting image at URL ' + url + ' response: ' image_data.text)
+        log('Problems getting image at URL ' + url + ' response: + ' image_data.text)
         return 'Nothing found'
     data = json.dumps({
         "requests": [{
