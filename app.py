@@ -9,15 +9,19 @@ from flask import Flask, request
 app = Flask(__name__)
 
 def get_image_text(url):
+    image_data = requests.get(url)
+    if image_data.status_code / 100 != 2:
+        log('Problems getting image at URL ' + url + ' response: ' image_data.text)
+        return 'Nothing found'
     data = json.dumps({
         "requests": [{
-            "image": {"source": {"imageUri": url}},
+            "image": {"content": image_data.content.encode('base64')},
             "features": [{"type": "TEXT_DETECTION"}]
         }]
     })
     response = requests.post('https://vision.googleapis.com/v1/images:annotate?fields=responses%2FfullTextAnnotation%2Ftext&key=' + os.environ['VISION_API_KEY'], data=data)
     log(response.text)
-    if response.status_code != 200:
+    if response.status_code / 100 != 2:
         log('Error calling Cloud Vision API: ' + response.text + ' for URL: ' + url)
         return 'Nothing found'
     return '\n'.join(line['fullTextAnnotation']['text'] for line in response.json()['responses'] if 'fullTextAnnotation' in line) or 'Nothing found'
