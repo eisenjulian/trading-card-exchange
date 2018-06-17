@@ -96,12 +96,12 @@ def send_message(recipient_id, message_text):
         log(r.text)
 
 
-def log(msg, *args, **kwargs):  # simple wrapper for logging to stdout on heroku
+def log(msg):  # simple wrapper for logging to stdout on heroku
     try:
         if type(msg) is dict:
             msg = json.dumps(msg)
         else:
-            msg = unicode(msg).format(*args, **kwargs)
+            msg = unicode(msg)
         print u"{}: {}".format(datetime.now(), msg)
     except UnicodeEncodeError:
         pass  # squash logging errors in case of non-ascii text
