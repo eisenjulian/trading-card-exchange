@@ -8,6 +8,18 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+def get_image_text(url):
+    data = json.dumps({
+        "requests": [{
+            "image": {"source": {"imageUri": url}},
+            "features": [{"type": "TEXT_DETECTION"}]
+        }]
+    })
+    response = requests.post('https://vision.googleapis.com/v1/images:annotate?fields=responses%2FfullTextAnnotation%2Ftext&key=' + os.environ['VISION_API_KEY'], data=data)
+    if response.status_code != 200:
+        print 'Error calling Cloud Vision API: ' + response.text + ' for URL: ' + url
+        return 'Nothing found'
+    return '\n'.join(line['fullTextAnnotation']['text'] for line in response.json()['responses'])
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -38,9 +50,14 @@ def webhook():
 
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
-                    message_text = messaging_event["message"]["text"]  # the message's text
-
-                    send_message(sender_id, "roger that!")
+                    message = messaging_event["message"]
+                    if 'text' in message:
+                        message_text = message["text"]  # the message's text
+                        send_message(sender_id, "roger that!")
+                    elif 'attachments' in message:
+                        for attachment in message['attachments']:
+                            if attachment['type'] == 'image':
+                                send_message(sender_id, get_image_text(attachment['payload']['url']))
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
