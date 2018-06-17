@@ -16,9 +16,9 @@ def get_image_text(url):
         }]
     })
     response = requests.post('https://vision.googleapis.com/v1/images:annotate?fields=responses%2FfullTextAnnotation%2Ftext&key=' + os.environ['VISION_API_KEY'], data=data)
-    print response.text
+    log(response.text)
     if response.status_code != 200:
-        print 'Error calling Cloud Vision API: ' + response.text + ' for URL: ' + url
+        log('Error calling Cloud Vision API: ' + response.text + ' for URL: ' + url)
         return 'Nothing found'
     return '\n'.join(line['fullTextAnnotation']['text'] for line in response.json()['responses'])
 
