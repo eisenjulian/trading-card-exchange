@@ -21,8 +21,9 @@ def find_card(lines):
         for player in players:
             for line in clean_lines:
                 clean_player = clean(' '.join(player.split()[1:]))
-                if line in clean_player:
-                    return player
+                if len(line) > 4 and line in clean_player:
+                    log('Found match ' + line + ' in  '+ player) 
+                    return team + ' ' + player
     return 'Nothing found!'
         
 
