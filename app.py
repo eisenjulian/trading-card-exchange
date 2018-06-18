@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import unidecode
+import string
 from datetime import datetime
 
 import requests
@@ -13,7 +14,7 @@ with open('cards.json') as f:
     cards = json.load(f)
     
 def clean(string):
-    return unidecode.unidecode(string).lower()
+    return unidecode.unidecode(string).translate(None, string.punctuation).lower().strip()
 
 def find_card(lines):
     clean_lines = [clean(line) for line in lines]
