@@ -46,7 +46,10 @@ def get_image_text(url):
     if response.status_code / 100 != 2:
         log('Error calling Cloud Vision API: ' + response.text + ' for URL: ' + url)
         return 'Nothing found'
-    lines = '\n'.join(line['fullTextAnnotation']['text'] for line in response.json()['responses'] if 'fullTextAnnotation' in line).split('\n')
+    lines = ('\n'.join(
+        line['fullTextAnnotation']['text'] for line in response.json()['responses'] if 'fullTextAnnotation' in line
+    )).split('\n')
+    print lines
     return find_card(lines)
 
 @app.route('/', methods=['GET'])
