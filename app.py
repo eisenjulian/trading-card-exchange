@@ -17,14 +17,17 @@ def clean(string):
 
 def find_card(lines):
     clean_lines = [clean(line) for line in lines]
+    best_match = 'Nothing found!'
+    score = 0
     for team, players in cards.iteritems():
         for player in players:
             for line in clean_lines:
                 clean_player = clean(' '.join(player.split()[1:]))
-                if len(line) > 4 and line in clean_player:
+                if len(line) > 4 and line in clean_player and len(line) > score:
                     log('Found match ' + line + ' in  '+ player) 
-                    return team + ' ' + player
-    return 'Nothing found!'
+                    score = len(line)
+                    best_match = team + ' ' + player
+    return best_match
         
 
 def get_image_text(url):
