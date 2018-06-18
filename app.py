@@ -1,12 +1,30 @@
 import os
 import sys
 import json
+import unidecode
 from datetime import datetime
 
 import requests
 from flask import Flask, request
 
 app = Flask(__name__)
+
+with open('cards.json') as f:
+    cards = json.load(f)
+    
+def clean(string):
+    return unidecode.unidecode(string).lower()
+
+def find_card(lines):
+    clean_lines = [clean(line) for line in lines]
+    for team, players in cards.iteritems():
+        for player in players:
+            for line in clean_lines:
+                clean_player = clean(' '.join(player.split()[1:]))
+                if line in clean_player:
+                    return player
+    return 'Nothing found!'
+        
 
 def get_image_text(url):
     image_data = requests.get(url)
@@ -24,7 +42,8 @@ def get_image_text(url):
     if response.status_code / 100 != 2:
         log('Error calling Cloud Vision API: ' + response.text + ' for URL: ' + url)
         return 'Nothing found'
-    return '\n'.join(line['fullTextAnnotation']['text'] for line in response.json()['responses'] if 'fullTextAnnotation' in line) or 'Nothing found'
+    lines = '\n'.join(line['fullTextAnnotation']['text'] for line in response.json()['responses'] if 'fullTextAnnotation' in line).split('\n')
+    return find_card(lines)
 
 @app.route('/', methods=['GET'])
 def verify():
