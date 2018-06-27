@@ -12,7 +12,6 @@ def get_profile_data(user_id):
         url = "https://graph.facebook.com/v3.0/{user_id}?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token={token}".format(user_id=user_id, token=os.environ["PAGE_ACCESS_TOKEN"])
         r = requests.get(url)
         if r.status_code != 200:
-            log(url)
             log(r.status_code)
             log(r.text)
             return {'id': user_id}
@@ -40,7 +39,7 @@ def webhook(request):
         for entry in data["entry"]:
             for messaging_event in entry["messaging"]:
                 if messaging_event.get("message"):  # someone sent us a message
-                    messaging_event['sender'] = get_profile_data(messaging_event['sender']['id'])
+                    messaging_event['sender_data'] = get_profile_data(messaging_event['sender']['id'])
                     messages = dialog_manager.run(messaging_event)
                     send_messages(messaging_event['sender'], messages)
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
