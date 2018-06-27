@@ -1,7 +1,8 @@
-from .. import dialog_manager
 import time
 import json
 import requests
+import os
+from .. import dialog_manager
 from ..utils import log
 
 # when the endpoint is registered as a webhook, it must echo back
