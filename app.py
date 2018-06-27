@@ -123,7 +123,7 @@ def send_messages(recipient_id, messages):
 
         data = json.dumps({
             "recipient": {"id": recipient_id},
-            message
+            "message": message
         })
         r = requests.post("https://graph.facebook.com/v3.0/me/messages", params=params, headers=headers, data=data)
         if r.status_code != 200:
