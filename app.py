@@ -85,7 +85,7 @@ def webhook():
                     message = messaging_event["message"]
                     if 'text' in message:
                         message_text = message["text"]  # the message's text
-                        send_messages(sender_id, [{"text": "roger that!"])
+                        send_messages(sender_id, [{"text": "roger that!"}])
                     elif 'attachments' in message:
                         for attachment in message['attachments']:
                             if attachment['type'] == 'image':
