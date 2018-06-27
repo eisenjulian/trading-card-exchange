@@ -107,7 +107,7 @@ def webhook():
 
 
 def send_messages(recipient_id, messages):
-    log(u"sending message to {recipient}: {text}".format(recipient=recipient_id, json.dumps(messages)))
+    log(u"sending message to {recipient}: {text}".format(recipient=recipient_id, text=json.dumps(messages)))
     params = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
     headers = {"Content-Type": "application/json"}
     for message in messages:
