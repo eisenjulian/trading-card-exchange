@@ -25,7 +25,7 @@ def webhook(request):
             for messaging_event in entry["messaging"]:
                 if messaging_event.get("message"):  # someone sent us a message
                     messages = dialog_manager.run(messaging_event)
-                    send_messages(messages['sender'], messages)
+                    send_messages(messaging_event['sender'], messages)
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
                     pass
 
