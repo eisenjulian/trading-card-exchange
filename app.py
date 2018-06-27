@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import json
 import unidecode
 from datetime import datetime
@@ -84,11 +85,14 @@ def webhook():
                     message = messaging_event["message"]
                     if 'text' in message:
                         message_text = message["text"]  # the message's text
-                        send_message(sender_id, "roger that!")
+                        send_messages(sender_id, [{"text": "roger that!"])
                     elif 'attachments' in message:
                         for attachment in message['attachments']:
                             if attachment['type'] == 'image':
-                                send_message(sender_id, get_image_text(attachment['payload']['url']))
+                                send_messages(
+                                    sender_id, 
+                                    [{"text": get_image_text(attachment['payload']['url'])}]
+                                )
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -102,28 +106,29 @@ def webhook():
     return "ok", 200
 
 
-def send_message(recipient_id, message_text):
+def send_messages(recipient_id, messages):
+    log(u"sending message to {recipient}: {text}".format(recipient=recipient_id, json.dumps(messages)))
+    params = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
+    headers = {"Content-Type": "application/json"}
+    for message in messages:
+        data = json.dumps({
+            "recipient": {"id": recipient_id},
+            "sender_action": "typing_on"
+        })
+        r = requests.post("https://graph.facebook.com/v3.0/me/messages", params=params, headers=headers, data=data)
+        time.sleep(2)
+        if r.status_code != 200:
+            log(r.status_code)
+            log(r.text)
 
-    log(u"sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
-
-    params = {
-        "access_token": os.environ["PAGE_ACCESS_TOKEN"]
-    }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    data = json.dumps({
-        "recipient": {
-            "id": recipient_id
-        },
-        "message": {
-            "text": message_text
-        }
-    })
-    r = requests.post("https://graph.facebook.com/v3.0/me/messages", params=params, headers=headers, data=data)
-    if r.status_code != 200:
-        log(r.status_code)
-        log(r.text)
+        data = json.dumps({
+            "recipient": {"id": recipient_id},
+            message
+        })
+        r = requests.post("https://graph.facebook.com/v3.0/me/messages", params=params, headers=headers, data=data)
+        if r.status_code != 200:
+            log(r.status_code)
+            log(r.text)
 
 
 def log(msg):  # simple wrapper for logging to stdout on heroku
