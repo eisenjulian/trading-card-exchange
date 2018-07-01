@@ -1,4 +1,5 @@
 import utils
+import texts
 import database as db
 
 def run(messaging_event):
@@ -10,9 +11,19 @@ def run(messaging_event):
 
 def process(messaging_event):
     message = messaging_event['message']
-    if 'text' in message:
+    postback = messaging_event['postback']
+    sender = messaging_event['sender_data']
+
+    t = texts.get_texts(sender)
+
+    message_text = message and message['text'] or None
+    postback_payload = postback and postback['payload'] or None
+
+    if postback_payload == '/start':
+        return [{'text': t('welcome')}]
+    elif 'text' in message:
         message_text = message['text']  # the message's text
-        return [{'text': 'roger that! ' + messaging_event['sender_data']['first_name']}]
+        return [{'text': t('roger')}]
     elif 'attachments' in message:
         for attachment in message['attachments']:
             if attachment['type'] == 'image':
