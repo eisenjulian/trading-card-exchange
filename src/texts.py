@@ -19,6 +19,7 @@ def get_texts(user):
         lang = 'en'
     def get_text(key, **params):
         params.update(user)
+        print 'Getting text ' + key, params
         text = langs[lang][key]
         if type(text) == list:
             text = random.choice(text)
