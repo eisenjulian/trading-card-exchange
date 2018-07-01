@@ -10,19 +10,18 @@ def run(messaging_event):
     return messages
 
 def process(messaging_event):
-    message = messaging_event['message']
-    postback = messaging_event['postback']
+    message = messaging_event['message'] if 'message' in messaging_event else {}
+    postback = messaging_event['postback'] if 'postback' in messaging_event else None
     sender = messaging_event['sender_data']
 
     t = texts.get_texts(sender)
 
-    message_text = message and message['text'] or None
+    message_text = message and message['text'] if 'text' in message else None
     postback_payload = postback and postback['payload'] or None
 
     if postback_payload == '/start':
         return [{'text': t('welcome')}]
-    elif 'text' in message:
-        message_text = message['text']  # the message's text
+    elif message_text:
         return [{'text': t('roger')}]
     elif 'attachments' in message:
         for attachment in message['attachments']:
