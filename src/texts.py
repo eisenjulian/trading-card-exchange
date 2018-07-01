@@ -14,15 +14,18 @@ langs = {
 }
 
 def get_texts(user):
-    lang = (user['locale'] or 'en').lower()[:2]
+    lang = 'en'
+    if 'locale' in user:
+        lang = user['locale'].lower()[:2]
     if not lang in langs:
         lang = 'en'
+
     def get_text(key, **params):
         params.update(user)
         print 'Getting text ' + key, params
         text = langs[lang][key]
         if type(text) == list:
             text = random.choice(text)
-        return text.format(params)
+        return text.format(**params)
 
     return get_text
