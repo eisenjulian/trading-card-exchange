@@ -5,11 +5,19 @@ import random
 langs = {
     'en': {
         'welcome': u'Hi {first_name}! I\'m here to help you complete your Russia 2018 album.',
-        'roger': u'Roger that! {first_name}'
+        'roger': u'Roger that! {first_name}',
+        'menu': u'Choose one of the following options',
+        '/trades': u'See my trades',
+        '/stickers': u'See stickers I have',
+        '/wishlist': u'See stickers I need'
     },
     'es': {
         'welcome': u'¡Hola {first_name}! Estoy para ayudarte a completar tu álbum de Rusia 2018.',
-        'roger': u'Roger that! {first_name}'
+        'roger': u'Roger that! {first_name}',
+        'menu': u'Elegí una de las siguientes opciones',
+        '/trades': u'Ver mis cambios',
+        '/stickers': u'Figuritas que tengo',
+        '/wishlist': u'Figuritas que quiero'
     }
 }
 
