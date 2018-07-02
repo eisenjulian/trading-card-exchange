@@ -30,9 +30,9 @@ def process(messaging_event):
         return {
             'text': t('menu'), 
             'quick_replies': [
-                {'title': t('/trades'), 'type': 'postback', 'payload': '/trades'},
-                {'title': t('/stickers'), 'type': 'postback', 'payload': '/stickers'},
-                {'title': t('/wishlist'), 'type': 'postback', 'payload': '/wishlist'}
+                {'content_type': 'text', 'title': t('/trades'), 'payload': '/trades'},
+                {'content_type': 'text', 'title': t('/stickers'), 'payload': '/stickers'},
+                {'content_type': 'text', 'title': t('/wishlist'), 'payload': '/wishlist'}
             ]
         }
 
