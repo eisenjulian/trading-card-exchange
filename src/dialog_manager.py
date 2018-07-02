@@ -4,7 +4,7 @@ import database as db
 
 def first_entity(message, name):
     nlp = message and  'nlp' in message and message['nlp'] or None
-    return nlp and name in nlp and nlp[name][0] or None
+    return nlp and 'entities' in nlp and name in nlp['entities'] and nlp['entities'][name][0] or None
 
 def get_intent(message, postback):
     if postback:
@@ -26,14 +26,15 @@ def process(messaging_event):
     sender = messaging_event['sender_data']
 
     t = texts.get_texts(sender)
-    menu = {
-        'text': t('menu'), 
-        'quick_replies': [
-            {'title': t('/trades'), 'type': 'postback', 'payload': '/trades'},
-            {'title': t('/stickers'), 'type': 'postback', 'payload': '/stickers'},
-            {'title': t('/wishlist'), 'type': 'postback', 'payload': '/wishlist'}
-        ]
-    }
+    def menu():
+        return {
+            'text': t('menu'), 
+            'quick_replies': [
+                {'title': t('/trades'), 'type': 'postback', 'payload': '/trades'},
+                {'title': t('/stickers'), 'type': 'postback', 'payload': '/stickers'},
+                {'title': t('/wishlist'), 'type': 'postback', 'payload': '/wishlist'}
+            ]
+        }
 
     message_text = message and message['text'] if 'text' in message else None
     intent = get_intent(message, postback)
@@ -41,15 +42,15 @@ def process(messaging_event):
     if intent == 'start':
         return [{'text': t('welcome')}]
     elif intent  == 'hi':
-        return [{'text': t('hi')}, menu]
+        return [{'text': t('hi')}, menu()]
     elif intent  == 'menu':
-        return [menu]
+        return [menu()]
     elif intent  == 'trades':
-        return [menu]
+        return [menu()]
     elif intent  == 'stickers':
-        return [menu]
+        return [menu()]
     elif intent  == 'wishlist':
-        return [menu]
+        return [menu()]
 
 
     elif message_text:
