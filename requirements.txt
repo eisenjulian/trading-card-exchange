@@ -11,3 +11,4 @@ Unidecode==1.0.22
 redis==2.10.6
 networkx==1.10
 attrs=18.1.0
+google-cloud-storage==1.10.0
