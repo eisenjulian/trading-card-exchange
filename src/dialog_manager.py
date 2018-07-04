@@ -28,7 +28,7 @@ def process(messaging_event):
     t = texts.get_texts(sender)
     def menu():
         return {
-            'text': t('menu'), 
+            'text': t('menu'),
             'quick_replies': [
                 {'content_type': 'text', 'title': t('/trades'), 'payload': '/trades'},
                 {'content_type': 'text', 'title': t('/stickers'), 'payload': '/stickers'},
@@ -41,16 +41,17 @@ def process(messaging_event):
 
     if intent == 'start':
         return [{'text': t('welcome')}]
-    elif intent  == 'hi':
+    elif intent == 'hi':
         return [{'text': t('hi')}, menu()]
-    elif intent  == 'menu':
+    elif intent == 'menu':
         return [menu()]
-    elif intent  == 'trades':
+    elif intent == 'trades':
         return [menu()]
-    elif intent  == 'stickers':
+    elif intent == 'stickers':
         return [menu()]
-    elif intent  == 'wishlist':
-        return [menu()]
+    elif intent == 'wishlist':
+        # TODO: Render stickers
+        return db.db.hgetall(db.get_wanted_key(sender['id'])).keys() or [t('no_wishlist')]
 
 
     elif message_text:

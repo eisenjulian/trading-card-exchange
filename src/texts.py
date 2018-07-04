@@ -9,6 +9,9 @@ langs = {
         'menu': u'Choose one of the following options',
         'hi': [u'Hello {first_name}', u'Hi there {first_name}', u'Hey {first_name}'],
         '/trades': u'See my trades',
+        'no_trades': u'You have no trades',
+        'no_stickers': u'You have no stickers',
+        'no_wishlist': u'You have no cards in your wishlist',
         '/stickers': u'See stickers I have',
         '/wishlist': u'See stickers I need'
     },
@@ -17,6 +20,9 @@ langs = {
         'roger': u'Roger that! {first_name}',
         'menu': u'Elegí una de las siguientes opciones',
         'hi': [u'Hola {first_name}', u'Hola hola {first_name}', u'Buenas! {first_name}'],
+        'no_trades': u'No tienes ningún cambio',
+        'no_stickers': u'No tienes ninguna figurita',
+        'no_wishlist': u'No tienes figuritas que quieras',
         '/trades': u'Ver mis cambios',
         '/stickers': u'Figuritas que tengo',
         '/wishlist': u'Figuritas que quiero'
