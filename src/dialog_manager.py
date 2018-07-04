@@ -51,7 +51,7 @@ def process(messaging_event):
         return [menu()]
     elif intent == 'wishlist':
         # TODO: Render stickers
-        return db.db.hgetall(db.get_wanted_key(sender['id'])).keys() or [t('no_wishlist')]
+        return db.db.hgetall(db.get_wanted_key(sender['id'])).keys() or [{'text': t('no_wishlist')}]
 
 
     elif message_text:
