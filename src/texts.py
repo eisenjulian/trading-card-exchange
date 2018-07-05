@@ -13,7 +13,11 @@ langs = {
         'no_stickers': u'You have no stickers',
         'no_wishlist': u'You have no cards in your wishlist',
         '/stickers': u'See stickers I have',
-        '/wishlist': u'See stickers I need'
+        '/add_sticker': u'Add a sticker',
+        '/ask_sticker': u'Which one?',
+        '/ask_wishlist': u'Which one?',
+        '/wishlist': u'See stickers I need',
+        '/add_wishlist': u'Add a sticker I need'
     },
     'es': {
         'welcome': u'¡Hola {first_name}! Estoy para ayudarte a completar tu álbum de Rusia 2018.',
@@ -25,7 +29,11 @@ langs = {
         'no_wishlist': u'No tienes figuritas que quieras',
         '/trades': u'Ver mis cambios',
         '/stickers': u'Figuritas que tengo',
-        '/wishlist': u'Figuritas que quiero'
+        '/add_sticker': u'Agregar una figurita',
+        '/ask_sticker': u'Cuál?',
+        '/ask_wishlist': u'Cuál?',
+        '/wishlist': u'Figuritas que quiero',
+        '/add_wishlist': u'Agregar una figurita'
     }
 }
 
