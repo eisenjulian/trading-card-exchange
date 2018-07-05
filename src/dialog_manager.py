@@ -47,7 +47,8 @@ def process(messaging_event):
         }
 
 
-    del sender['last_action']
+    if 'last_action' in sender:
+        del sender['last_action']
     message_text = message.get('text')
     intent = get_intent(message, postback)
 
