@@ -21,11 +21,13 @@ def log(msg):  # simple wrapper for logging to stdout on heroku
     sys.stdout.flush()
 
 def clean(string):
+    if not string:
+        return ''
     return unidecode.unidecode(string).translate(None, '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~').lower().strip()
 
-def find_card(lines):
+def get_stickers_from_text(lines):
     clean_lines = [clean(line) for line in lines]
-    best_match = 'Nothing found!'
+    best_match = []
     score = 0
     for team, players in cards.iteritems():
         for player in players:
@@ -34,11 +36,12 @@ def find_card(lines):
                 if len(line) > 4 and line in clean_player and len(line) > score:
                     log('Found match ' + line + ' in  '+ player) 
                     score = len(line)
-                    best_match = team + ' ' + player
-    return best_match
+                    best_match = player.split()[0]
+                    # best_match = team + ' ' + player
+    return [best_match]
         
 
-def get_image_text(url):
+def get_stickers_from_image(url):
     image_data = requests.get(url)
     if image_data.status_code / 100 != 2:
         log('Problems getting image at URL ' + url + ' response: ' + image_data.text)
@@ -58,4 +61,4 @@ def get_image_text(url):
         line['fullTextAnnotation']['text'] for line in response.json()['responses'] if 'fullTextAnnotation' in line
     )).split('\n')
     print lines
-    return find_card(lines)
+    return get_stickers_from_text(lines)
