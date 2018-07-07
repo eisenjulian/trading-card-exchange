@@ -38,6 +38,7 @@ def get_card(id):
     card.update(json.loads(db.get('card:' + id) or '{}'))
     return card
 
+
 def set_card(card):
     db.set('card:' + card['id'], json.dumps(card))
 
@@ -83,9 +84,9 @@ def add_user_transaction(user, put, get, transaction_id):
     user['collection'].remove(put)
     card_to_put = get_card(put)
     card_to_put['owners'].remove(user['id'])
-    save_card(card_to_put)
+    set_card(card_to_put)
     card_to_get = get_card(get)
     card_to_get['whished'].remove(user['id'])
-    save_card(card_to_get)
+    set_card(card_to_get)
     user['transactions'].append(dict(put=put, get=get, id=transaction_id))
     set_user(user)
