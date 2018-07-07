@@ -2,6 +2,7 @@ import utils
 import texts
 import database as db
 import re
+import nlg
 
 def get_entities_deprecated(message, name):
     nlp = message and  'nlp' in message and message['nlp'] or None
@@ -43,14 +44,6 @@ def process(messaging_event):
     sender = messaging_event['sender_data']
 
     t = texts.get_texts(sender)
-    def pill(intent):
-        return {'content_type': 'text', 'title': t(intent), 'payload': intent}
-
-    def menu():
-        return {
-            'text': t('menu'),
-            'quick_replies': [pill('/trades'), pill('/stickers'), pill('/wishlist')]
-        }
 
 
     last_action = sender.get('last_action')
@@ -62,11 +55,11 @@ def process(messaging_event):
     if intent == 'start':
         return [{'text': t('welcome')}]
     elif intent == 'hi':
-        return [{'text': t('hi')}, menu()]
+        return [{'text': t('hi')}, nlg.menu(t)]
     elif intent == 'menu':
-        return [menu()]
+        return [nlg.menu(t)]
     elif intent == 'trades':
-        return [menu()]
+        return [nlg.menu(t)]
     elif intent == 'add_sticker':
         cards = get_card_ids(message)
         if cards:
@@ -83,15 +76,15 @@ def process(messaging_event):
         return [{'text': t('/ask_wishlist')}]
     elif intent == 'stickers':
         if sender.get('collection'):
-            return [{'text': t('no_stickers'), 'quick_replies': [pill('/add_sticker')]}]
+            return nlg.show_collection(t, sender.get('collection'))
         else:
-            return [{'text': t('no_stickers'), 'quick_replies': [pill('/add_sticker')]}]
+            return [{'text': t('no_stickers'), 'quick_replies': [nlg.pill(t, '/add_sticker')]}]
             
     elif intent == 'wishlist':
         if sender.get('wanted'):
-            return [{'text': t('no_wishlist'), 'quick_replies': [pill('/add_wishlist')]}]
+            return nlg.show_wanted(t, sender.get('wanted'))
         else:
-            return [{'text': t('no_wishlist'), 'quick_replies': [pill('/add_wishlist')]}]
+            return [{'text': t('no_wishlist'), 'quick_replies': [nlg.pill(t, '/add_wishlist')]}]
         # TODO: Render stickers
         # return db.db.hgetall(db.get_wanted_key(sender['id'])).keys() or [{'text': t('no_wishlist')}]
 
