@@ -3,8 +3,8 @@ import json
 import requests
 import traceback
 import os
-from .. import dialog_manager
-from ..utils import log
+from src import dialog_manager
+from src.utils import log
 
 profile_cache = {}
 
