@@ -12,10 +12,10 @@ def compute_match(start_user_id=None):
         card = db.get_card(card_id)
         for user_id in card['owners']:
             graph.add_edge(card_id, user_id)
+    cycles = nx.simple_cycles(graph)
     if start_user_id is None:
-        # TODO: Process output to generate exchanges
-        return nx.simple_cycles(graph)
+        return cycles
     try:
-        return db.add_transaction(nx.find_cycle(graph, start_user_id))
-    except nx.exception.NetworkXNoCycle:
+        return [cycle for cycle in cycles if start_user_id in cycle][0]
+    except IndexError:
         return None
