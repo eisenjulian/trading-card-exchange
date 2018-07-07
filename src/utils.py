@@ -36,9 +36,9 @@ def get_stickers_from_text(lines):
                 if len(line) > 4 and line in clean_player and len(line) > score:
                     log('Found match ' + line + ' in  '+ player)
                     score = len(line)
-                    best_match = player.split()[0]
+                    best_match = [player.split()[0]]
                     # best_match = team + ' ' + player
-    return [best_match]
+    return best_match
 
 
 def get_stickers_from_image(url):

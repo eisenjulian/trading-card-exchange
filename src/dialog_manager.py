@@ -23,11 +23,11 @@ def get_card_ids(message):
     if 'attachments' in message:
         for attachment in message['attachments']:
             if attachment['type'] == 'image':
-                return [utils.get_stickers_from_image(attachment['payload']['url'])]
+                return utils.get_stickers_from_image(attachment['payload']['url'])
     return list(set(
         [str(ent['value']) for ent in get_entities(message, 'number')] +
         [s for s in message.get('text').split() if s.isdigit()] +
-        utils.get_stickers_from_text([message.get('text')])[0]
+        utils.get_stickers_from_text([message.get('text')])
     ))
 
 def run(messaging_event):
