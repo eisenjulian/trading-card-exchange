@@ -8,7 +8,7 @@ from datetime import datetime
 with open(os.path.join('data', 'cards.json')) as f:
     print 'Loading cards'
     cards = json.load(f)
-    
+
 def log(msg):  # simple wrapper for logging to stdout on heroku
     try:
         if type(msg) is dict:
@@ -34,12 +34,12 @@ def get_stickers_from_text(lines):
             for line in clean_lines:
                 clean_player = clean(' '.join(player.split()[1:]))
                 if len(line) > 4 and line in clean_player and len(line) > score:
-                    log('Found match ' + line + ' in  '+ player) 
+                    log('Found match ' + line + ' in  '+ player)
                     score = len(line)
                     best_match = player.split()[0]
                     # best_match = team + ' ' + player
     return [best_match]
-        
+
 
 def get_stickers_from_image(url):
     image_data = requests.get(url)
