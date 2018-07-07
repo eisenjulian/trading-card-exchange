@@ -32,8 +32,8 @@ def get_card_ids(message):
     ))
 
 
-def run_match_and_answer(t, answer):
-    transaction = matching.compute_match(sender['id'])
+def run_match_and_answer(t, user_id, answer):
+    transaction = matching.compute_match(user_id)
     response = [answer]
     if transaction:
         response.append({'text': t('new_transaction')})
@@ -74,14 +74,14 @@ def process(messaging_event):
         cards = get_card_ids(message)
         if cards:
             db.add_collection(sender, cards)
-            return run_match_and_answer(t, {'text': t('collection_changed')})
+            return run_match_and_answer(t, sender['id'], {'text': t('collection_changed')})
         sender['last_action'] = '/ask_sticker'
         return [{'text': t('/ask_sticker')}]
     elif intent == 'add_wishlist':
         cards = get_card_ids(message)
         if cards:
             db.add_wanted(sender, cards)
-            return run_match_and_answer(t, {'text': t('wanted_changed')})
+            return run_match_and_answer(t, sender['id'], {'text': t('wanted_changed')})
         sender['last_action'] = '/ask_wishlist'
         return [{'text': t('/ask_wishlist')}]
     elif intent == 'stickers':
@@ -100,7 +100,7 @@ def process(messaging_event):
         cards = get_card_ids(message)
         if cards:
             db.add_collection(sender, cards)
-            return run_match_and_answer(t, {'text': t('collection_changed')})
+            return run_match_and_answer(t, sender['id'], {'text': t('collection_changed')})
         sender['last_action'] = '/ask_sticker'
         return [{'text': t('/ask_sticker')}]
 
@@ -108,7 +108,7 @@ def process(messaging_event):
         cards = get_card_ids(message)
         if cards:
             db.add_wanted(sender, cards)
-            return run_match_and_answer(t, {'text': t('wanted_changed')})
+            return run_match_and_answer(t, sender['id'], {'text': t('wanted_changed')})
         sender['last_action'] = '/ask_wishlist'
         return [{'text': t('/ask_wishlist')}]
 
