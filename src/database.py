@@ -8,7 +8,7 @@ db = redis.from_url(os.environ.get("REDIS_URL"))
 
 
 def get_empty_user():
-    return dict(wanted=[], collection=[])
+    return dict(wanted=[], collection=[], transactions=[])
 
 
 def get_empty_card(id):
