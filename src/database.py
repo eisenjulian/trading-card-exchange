@@ -11,8 +11,8 @@ def get_empty_user():
     return dict(wanted=[], collection=[])
 
 
-def get_empty_card():
-    return dict(whished=[], owners=[])
+def get_empty_card(id):
+    return dict('id': id, whished=[], owners=[])
 
 
 def get_users():
@@ -34,7 +34,7 @@ def set_user(user):
 
 
 def get_card(id):
-    card = get_empty_card()
+    card = get_empty_card(id)
     card.update(json.loads(db.get('card:' + id) or '{}'))
     return card
 
