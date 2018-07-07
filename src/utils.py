@@ -5,9 +5,22 @@ import sys
 import json
 from datetime import datetime
 
+def clean(string):
+    if not string:
+        return ''
+    return unidecode.unidecode(string).translate(None, '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~').lower().strip()
+
 with open(os.path.join('data', 'cards.json')) as f:
     print 'Loading cards'
-    cards = json.load(f)
+    cards = {
+        player.split()[0] : {
+            'id': player.split()[0],
+            'clean': clean(' '.join(player.split()[1:])),
+            'team': team,
+            'name': ' '.join(player.split()[1:])
+        }
+        for team, players in json.load(f).iteritems()
+        for player in players}
 
 def log(msg):  # simple wrapper for logging to stdout on heroku
     try:
@@ -20,24 +33,18 @@ def log(msg):  # simple wrapper for logging to stdout on heroku
         pass  # squash logging errors in case of non-ascii text
     sys.stdout.flush()
 
-def clean(string):
-    if not string:
-        return ''
-    return unidecode.unidecode(string).translate(None, '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~').lower().strip()
-
 def get_stickers_from_text(lines):
     clean_lines = [clean(line) for line in lines]
     best_match = []
     score = 0
-    for team, players in cards.iteritems():
-        for player in players:
-            for line in clean_lines:
-                clean_player = clean(' '.join(player.split()[1:]))
-                if len(line) > 4 and line in clean_player and len(line) > score:
-                    log('Found match ' + line + ' in  '+ player)
-                    score = len(line)
-                    best_match = [player.split()[0]]
-                    # best_match = team + ' ' + player
+    for id, player in cards.iteritems():
+        for line in clean_lines:
+            clean_player = player['clean']
+            if len(line) > 4 and line in clean_player and len(line) > score:
+                log('Found match ' + line + ' in  '+ player)
+                score = len(line)
+                best_match = [id]
+                # best_match = team + ' ' + player
     return best_match
 
 
