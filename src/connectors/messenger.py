@@ -1,6 +1,7 @@
 import time
 import json
 import requests
+import traceback
 import os
 from .. import dialog_manager
 from ..utils import log
@@ -40,9 +41,12 @@ def webhook(request):
             for messaging_event in entry["messaging"]:
                 # someone sent us a message or clicked/tapped "postback" button
                 if messaging_event.get("message") or messaging_event.get("postback"): 
-                    messaging_event['sender_data'] = get_profile_data(messaging_event['sender']['id'])
-                    messages = dialog_manager.run(messaging_event)
-                    send_messages(messaging_event['sender'], messages)
+                    try:
+                        messaging_event['sender_data'] = get_profile_data(messaging_event['sender']['id'])
+                        messages = dialog_manager.run(messaging_event)
+                        send_messages(messaging_event['sender'], messages)
+                    except Exception:
+                        log(traceback.format_exc())
 
     return "ok", 200
 
