@@ -1,4 +1,5 @@
 import database as db
+import utils
 
 def pill(t, intent):
     return {'content_type': 'text', 'title': t(intent), 'payload': intent}
@@ -21,9 +22,9 @@ def show_collection(t, collection):
                 "elements": [
                     {
                         "title": card.get('name', card['id']),
-                        "subtitle": card.get('desc', card['id']),
+                        "subtitle": card.get('team', card['id']),
                         "buttons": [button(t, '/remove_from_collection')]
-                    } for card in [db.get_card(card_id) for card_id in collection]
+                    } for card in [utils.cards.get(card_id) for card_id in collection] if card
                 ]
             }
         }
@@ -38,9 +39,9 @@ def show_wanted(t, wanted):
                 "elements": [
                     {
                         "title": card.get('name', card['id']),
-                        "subtitle": card.get('desc', card['id']),
+                        "subtitle": card.get('team', card['id']),
                         "buttons": [button(t, '/remove_from_wanted')]
-                    } for card in [db.get_card(card_id) for card_id in wanted]
+                    } for card in [utils.cards.get(card_id) for card_id in wanted] if card
                 ]
             }
         }
