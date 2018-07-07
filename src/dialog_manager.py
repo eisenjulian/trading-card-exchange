@@ -20,7 +20,7 @@ def get_card_ids(message):
                 return [utils.get_stickers_from_image(attachment['payload']['url'])]
     return list(set(
         [str(ent['value']) for ent in get_entities(message, 'number')] +\
-        [s for s in str.split() if s.isdigit()] +\
+        [s for s in message.get('text').split() if s.isdigit()] +\
         [utils.get_stickers_from_text([message.get('text')])]
     ))
 
