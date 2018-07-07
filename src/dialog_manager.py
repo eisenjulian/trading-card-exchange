@@ -3,9 +3,15 @@ import texts
 import database as db
 import re
 
-def get_entities(message, name):
+def get_entities_deprecated(message, name):
     nlp = message and  'nlp' in message and message['nlp'] or None
     return nlp and 'entities' in nlp and name in nlp['entities'] and nlp['entities'][name]
+
+def get_entities(message, name):
+    try:
+        return message['nlp']['entities'][name]
+    except KeyError:
+        return []
 
 def get_intent(message, postback):
     if postback:
