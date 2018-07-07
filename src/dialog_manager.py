@@ -71,15 +71,15 @@ def process(messaging_event):
         if cards:
             db.add_wanted(sender, cards)
             return [{'text': t('wanted_changed')}]
-        sender['last_action'] = 'ask_sticker'
-        return [{'text': t('ask_sticker')}]
+        sender['last_action'] = '/ask_sticker'
+        return [{'text': t('/ask_sticker')}]
     elif intent == 'add_wishlist':
         cards = get_card_ids(message)
         if cards:
             db.add_collection(sender, cards)
             return [{'text': t('collection_changed')}]
-        sender['last_action'] = 'ask_wishlist'
-        return [{'text': t('ask_wishlist')}]
+        sender['last_action'] = '/ask_wishlist'
+        return [{'text': t('/ask_wishlist')}]
     elif intent == 'stickers':
         if sender.get('collection'):
             return [{'text': t('no_stickers'), 'quick_replies': [pill('/add_sticker')]}]
@@ -94,21 +94,21 @@ def process(messaging_event):
         # TODO: Render stickers
         # return db.db.hgetall(db.get_wanted_key(sender['id'])).keys() or [{'text': t('no_wishlist')}]
 
-    if sender.get('last_action') == 'ask_sticker':
+    if sender.get('last_action') == '/ask_sticker':
         cards = get_card_ids(message)
         if cards:
             db.add_collection(sender, cards)
             return [{'text': t('collection_changed')}]
-        sender['last_action'] = 'ask_sticker'
-        return [{'text': t('ask_sticker')}]
+        sender['last_action'] = '/ask_sticker'
+        return [{'text': t('/ask_sticker')}]
 
-    if sender.get('last_action') == 'ask_wishlist':
+    if sender.get('last_action') == '/ask_wishlist':
         cards = get_card_ids(message)
         if cards:
             db.add_wanted(sender, cards)
             return [{'text': t('wanted_changed')}]
-        sender['last_action'] = 'ask_wishlist'
-        return [{'text': t('ask_wishlist')}]
+        sender['last_action'] = '/ask_wishlist'
+        return [{'text': t('/ask_wishlist')}]
 
 
     if message_text:
