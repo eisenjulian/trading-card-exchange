@@ -17,7 +17,7 @@ def get_intent(message, postback):
     if postback:
         return postback['payload'][1:].split()[0]
     intent = get_entities(message, 'intent')[0]
-    return intent and intent['value'] or None
+    return intent and intent['confidence'] > 0.8 and intent['value'] or None
 
 def get_card_ids(message):
     if 'attachments' in message:
@@ -53,7 +53,8 @@ def process(messaging_event):
         }
 
 
-    if 'last_action' in sender:
+    last_action = sender.get('last_action')
+    if last_action:
         del sender['last_action']
     message_text = message.get('text')
     intent = get_intent(message, postback)
@@ -94,7 +95,7 @@ def process(messaging_event):
         # TODO: Render stickers
         # return db.db.hgetall(db.get_wanted_key(sender['id'])).keys() or [{'text': t('no_wishlist')}]
 
-    if sender.get('last_action') == '/ask_sticker':
+    if last_action == '/ask_sticker':
         cards = get_card_ids(message)
         if cards:
             db.add_collection(sender, cards)
@@ -102,7 +103,7 @@ def process(messaging_event):
         sender['last_action'] = '/ask_sticker'
         return [{'text': t('/ask_sticker')}]
 
-    if sender.get('last_action') == '/ask_wishlist':
+    if last_action == '/ask_wishlist':
         cards = get_card_ids(message)
         if cards:
             db.add_wanted(sender, cards)
