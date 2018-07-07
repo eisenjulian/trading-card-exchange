@@ -10,7 +10,7 @@ def button(t, intent):
 def menu(t):
     return {
         'text': t('menu'),
-        'quick_replies': [pill('/trades'), pill('/stickers'), pill('/wishlist')]
+        'quick_replies': [pill(t, '/trades'), pill(t, '/stickers'), pill(t, '/wishlist')]
     }
 
 def show_collection(t, collection):
