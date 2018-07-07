@@ -12,7 +12,7 @@ def get_empty_user():
 
 
 def get_empty_card(id):
-    return dict('id': id, whished=[], owners=[])
+    return dict(id=id, whished=[], owners=[])
 
 
 def get_users():
