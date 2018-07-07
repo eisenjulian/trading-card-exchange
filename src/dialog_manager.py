@@ -1,12 +1,10 @@
+import re
 import utils
 import texts
 import database as db
-import re
 import nlg
+import matching
 
-def get_entities_deprecated(message, name):
-    nlp = message and  'nlp' in message and message['nlp'] or None
-    return nlp and 'entities' in nlp and name in nlp['entities'] and nlp['entities'][name]
 
 def get_entities(message, name):
     try:
@@ -14,11 +12,13 @@ def get_entities(message, name):
     except KeyError:
         return []
 
+
 def get_intent(message, postback):
     if postback:
         return postback['payload'][1:].split()[0]
     intent = get_entities(message, 'intent')[0]
     return intent and intent['confidence'] > 0.8 and intent['value'] or None
+
 
 def get_card_ids(message):
     if 'attachments' in message:
@@ -31,6 +31,17 @@ def get_card_ids(message):
         utils.get_stickers_from_text([message.get('text')])
     ))
 
+
+def run_match_and_answer(answer):
+    transaction = matching.compute_match(sender['id'])
+    response = [answer]
+    if transaction:
+        t = texts.get_texts(sender)
+        response.append({'text': t('new_transaction')})
+        db.add_transaction(transaction)
+    return response
+
+
 def run(messaging_event):
     sender = messaging_event['sender_data']
     sender.update(db.get_user(sender['id']))
@@ -38,13 +49,13 @@ def run(messaging_event):
     db.set_user(sender)
     return messages
 
+
 def process(messaging_event):
     message = messaging_event['message'] if 'message' in messaging_event else {}
     postback = messaging_event['postback'] if 'postback' in messaging_event else None
     sender = messaging_event['sender_data']
 
     t = texts.get_texts(sender)
-
 
     last_action = sender.get('last_action')
     if last_action:
@@ -64,14 +75,14 @@ def process(messaging_event):
         cards = get_card_ids(message)
         if cards:
             db.add_collection(sender, cards)
-            return [{'text': t('collection_changed')}]
+            return run_match_and_answer({'text': t('collection_changed')})
         sender['last_action'] = '/ask_sticker'
         return [{'text': t('/ask_sticker')}]
     elif intent == 'add_wishlist':
         cards = get_card_ids(message)
         if cards:
             db.add_wanted(sender, cards)
-            return [{'text': t('wanted_changed')}]
+            return run_match_and_answer({'text': t('wanted_changed')})
         sender['last_action'] = '/ask_wishlist'
         return [{'text': t('/ask_wishlist')}]
     elif intent == 'stickers':
@@ -79,20 +90,18 @@ def process(messaging_event):
             return nlg.show_collection(t, sender.get('collection'))
         else:
             return [{'text': t('no_stickers'), 'quick_replies': [nlg.pill(t, '/add_sticker')]}]
-            
+
     elif intent == 'wishlist':
         if sender.get('wanted'):
             return nlg.show_wanted(t, sender.get('wanted'))
         else:
             return [{'text': t('no_wishlist'), 'quick_replies': [nlg.pill(t, '/add_wishlist')]}]
-        # TODO: Render stickers
-        # return db.db.hgetall(db.get_wanted_key(sender['id'])).keys() or [{'text': t('no_wishlist')}]
 
     if last_action == '/ask_sticker':
         cards = get_card_ids(message)
         if cards:
             db.add_collection(sender, cards)
-            return [{'text': t('collection_changed')}]
+            return run_match_and_answer({'text': t('collection_changed')})
         sender['last_action'] = '/ask_sticker'
         return [{'text': t('/ask_sticker')}]
 
@@ -100,10 +109,9 @@ def process(messaging_event):
         cards = get_card_ids(message)
         if cards:
             db.add_wanted(sender, cards)
-            return [{'text': t('wanted_changed')}]
+            return run_match_and_answer({'text': t('wanted_changed')})
         sender['last_action'] = '/ask_wishlist'
         return [{'text': t('/ask_wishlist')}]
-
 
     if message_text:
         return [{'text': t('roger')}]
