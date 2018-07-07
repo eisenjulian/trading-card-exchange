@@ -3,6 +3,7 @@ import database as db
 
 
 def compute_match(start_user_id=None):
+    print 'user id ', start_user_id
     graph = nx.DiGraph()
     for user_id in db.get_users():
         user = db.get_user(user_id)
