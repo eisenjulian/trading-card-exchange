@@ -24,7 +24,9 @@ def get_cards():
 
 
 def get_user(id):
-    return json.loads(db.get('user:' + id)) or get_empty_user()
+    user = get_empty_user()
+    user.update(json.loads(db.get('user:' + id) or '{}'))
+    return user
 
 
 def set_user(user):
@@ -32,8 +34,9 @@ def set_user(user):
 
 
 def get_card(id):
-    return json.loads(db.get('card:' + id)) or get_empty_card()
-
+    card = get_empty_card()
+    card.update(json.loads(db.get('card:' + id) or '{}'))
+    return card
 
 def set_card(card):
     db.set('card:' + card['id'], json.dumps(card))
