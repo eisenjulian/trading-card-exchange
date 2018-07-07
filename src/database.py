@@ -7,6 +7,14 @@ from hashlib import md5
 db = redis.from_url(os.environ.get("REDIS_URL"))
 
 
+def get_empty_user():
+    return dict(wanted=[], collection=[])
+
+
+def get_empty_card():
+    return dict(whished=[], owners=[])
+
+
 def get_users():
     return [key.split(':')[1] for key in db.keys('user:*')]
 
@@ -16,7 +24,7 @@ def get_cards():
 
 
 def get_user(id):
-    return json.loads(db.get('user:' + id) or '{}')
+    return json.loads(db.get('user:' + id)) or get_empty_user()
 
 
 def set_user(user):
@@ -24,7 +32,7 @@ def set_user(user):
 
 
 def get_card(id):
-    return json.loads(db.get('card:' + id) or '{}')
+    return json.loads(db.get('card:' + id)) or get_empty_card()
 
 
 def set_card(card):
