@@ -16,6 +16,7 @@ def compute_match(start_user_id=None):
     if start_user_id is None:
         return cycles
     try:
+        print cycles
         return [cycle for cycle in cycles if start_user_id in cycle][0]
     except IndexError:
         return None

@@ -34,6 +34,7 @@ def get_card_ids(message):
 
 def run_match_and_answer(t, user_id, answer):
     transaction = matching.compute_match(user_id)
+    print transaction
     response = [answer]
     if transaction:
         response.append({'text': t('new_transaction')})
