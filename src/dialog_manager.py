@@ -70,15 +70,15 @@ def process(messaging_event):
     elif intent == 'add_sticker':
         cards = get_card_ids(message)
         if cards:
-            db.add_wanted(sender, cards)
-            return [{'text': t('wanted_changed')}]
+            db.add_collection(sender, cards)
+            return [{'text': t('collection_changed')}]
         sender['last_action'] = '/ask_sticker'
         return [{'text': t('/ask_sticker')}]
     elif intent == 'add_wishlist':
         cards = get_card_ids(message)
         if cards:
-            db.add_collection(sender, cards)
-            return [{'text': t('collection_changed')}]
+            db.add_wanted(sender, cards)
+            return [{'text': t('wanted_changed')}]
         sender['last_action'] = '/ask_wishlist'
         return [{'text': t('/ask_wishlist')}]
     elif intent == 'stickers':
