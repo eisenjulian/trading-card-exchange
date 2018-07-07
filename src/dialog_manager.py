@@ -27,7 +27,7 @@ def get_card_ids(message):
     return list(set(
         [str(ent['value']) for ent in get_entities(message, 'number')] +
         [s for s in message.get('text').split() if s.isdigit()] +
-        utils.get_stickers_from_text([message.get('text')][0])
+        utils.get_stickers_from_text([message.get('text')])[0]
     ))
 
 def run(messaging_event):
