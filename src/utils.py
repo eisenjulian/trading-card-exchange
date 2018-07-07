@@ -53,9 +53,12 @@ def get_stickers_from_image(url):
     if image_data.status_code / 100 != 2:
         log('Problems getting image at URL ' + url + ' response: ' + image_data.text)
         return 'Nothing found'
+    return get_stickers_from_data(image_data.content.encode('base64'))
+
+def get_stickers_from_data(image_data):
     data = json.dumps({
         "requests": [{
-            "image": {"content": image_data.content.encode('base64')},
+            "image": {"content": image_data},
             "features": [{"type": "TEXT_DETECTION"}]
         }]
     })
