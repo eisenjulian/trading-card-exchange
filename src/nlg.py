@@ -15,10 +15,6 @@ def menu(t):
         'quick_replies': [pill(t, '/trades'), pill(t, '/stickers'), pill(t, '/wishlist')]
     }
 
-def show_trade(t, trades):
-    return []
-
-
 def show_collection(t, collection):
     return [{
         "attachment": {
