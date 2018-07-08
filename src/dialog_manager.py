@@ -11,7 +11,7 @@ def get_entities(message, postback, name):
         if postback:
             return [postback['payload'].split(' ', 1)[1][name]]
         return message['nlp']['entities'][name]
-    except KeyError, IndexError:
+    except (KeyError, IndexError):
         return []
 
 
