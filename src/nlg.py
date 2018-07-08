@@ -74,8 +74,8 @@ def show_trades(t, trades):
                         "buttons": [button(t, '/cancel_transaction')]
                     }
                     for card_get, card_put in [
-                        (utils.cards.get(get_id), utils.cards.get(put_id))
-                        for get_id, put_id in trades
+                        (utils.cards.get(transaction['get']), utils.cards.get(transaction['put']))
+                        for transaction in trades
                     ] if card_get and card_put
                 ]
             }
