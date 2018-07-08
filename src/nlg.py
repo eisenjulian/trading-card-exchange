@@ -15,6 +15,12 @@ def menu(t):
         'quick_replies': [pill(t, '/trades'), pill(t, '/stickers'), pill(t, '/wishlist')]
     }
 
+def cta(t):
+    return {
+        'text': t('cta'),
+        'quick_replies': [pill(t, '/trades'), pill(t, '/stickers'), pill(t, '/wishlist')]
+    }
+
 def show_collection(t, collection):
     return [{
         "attachment": {
@@ -68,7 +74,7 @@ def show_trades(t, trades):
                             card_get=card_get.get('name', card_get['id']),
                             card_put=card_put.get('name', card_put['id'])
                         ),
-                        "buttons": [button(t, '/cancel_transaction')]
+                        "buttons": [button(t, '/cancel_transaction'), button(t, '/talk', transaction)]
                     }
                     for card_get, card_put in [
                         (utils.cards.get(transaction['get']), utils.cards.get(transaction['put']))

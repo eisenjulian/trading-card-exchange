@@ -4,7 +4,7 @@ import texts
 import database as db
 import nlg
 import matching
-
+from src.connectors import messenger_sender
 
 def get_entities(message, postback, name):
     try:
@@ -42,6 +42,9 @@ def find_match(t, user_id):
         return [{'text': t('new_transaction')}]
     return []
 
+def send_batch_messages(messages):
+    # this should enqueue this messages to be send by another process
+    messenger_sender.send_batch_messages(messages)
 
 def run(messaging_event):
     sender = messaging_event['sender_data']
@@ -101,6 +104,11 @@ def process(messaging_event):
         else:
             return [{'text': t('no_wishlist'), 'quick_replies': [nlg.pill(t, '/add_wishlist')]}]
 
+    elif intent == 'talk' or intent == 'reply':
+        transaction_id = get_entities(message, postback, 'id')[0]
+        sender['last_action'] = '/ask_message ' + transaction_id
+        return [{'text': t('ask_message')}]
+
     elif intent == 'cancel_transaction':
         return [nlg.menu(t)]
 
@@ -110,7 +118,22 @@ def process(messaging_event):
     elif intent == 'remove_wishlist':
         return [nlg.menu(t)]
 
-    if last_action == '/ask_sticker':
+
+    elif '/ask_message' in last_action:
+        transaction_id = last_action.split()[1]
+        transaction = db.get_transaction(transaction_id)
+        users = [user for user in transaction['cycle'][1::2] if user != sender['id']]
+        batch_messages = {user: [
+            t('message_received'), 
+            {'text': message['text'], 'quick_replies': [
+                nlg.pill(t, '/reply', {'id': transaction_id})
+            ]}
+        ] for user in users}
+        send_batch_messages(batch_messages)
+        return [t('message_sent'), nlg.cta()]
+
+
+    elif last_action == '/ask_sticker':
         if cards:
             db.add_collection(sender, cards)
             return [{'text': t('collection_changed')}] +\
@@ -119,7 +142,7 @@ def process(messaging_event):
         sender['last_action'] = '/ask_sticker'
         return [{'text': t('ask_sticker')}]
 
-    if last_action == '/ask_wishlist':
+    elif last_action == '/ask_wishlist':
         if cards:
             db.add_wanted(sender, cards)
             return [{'text': t('wanted_changed')}] +\

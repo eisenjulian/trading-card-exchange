@@ -83,6 +83,9 @@ def add_transaction(transaction):
             get_user(user_id), card_to_put_id, card_to_get_id, transaction_id
         )
 
+def get_transaction(id):
+    return {'cycle': json.loads(db.get('transaction:' + id))}
+
 
 def remove_if_exists(data, value):
     if value in data:
