@@ -16,8 +16,8 @@ def compute_match(start_user_id=None):
     cycles = nx.simple_cycles(graph)
     if start_user_id is None:
         return cycles
-    try:
-        print list(cycles)
-        return [cycle for cycle in cycles if start_user_id in cycle][0]
-    except IndexError:
-        return None
+    for cycle in cycles:
+        print cycle
+        if start_user_id in cycle:
+            return cycle
+    return None
