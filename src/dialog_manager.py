@@ -11,15 +11,15 @@ def get_entities(message, postback, name):
         if postback:
             return [postback['payload'].split(' ', 1)[1][name]]
         return message['nlp']['entities'][name]
-    except KeyError, IndexError:
+    except (KeyError, IndexError):
         return []
 
 
 def get_intent(message, postback):
     if postback:
         return postback['payload'][1:].split(' ', 1)[0]
-    intent = get_entities(message, postback, 'intent')[0]
-    return intent and intent['confidence'] > 0.8 and intent['value'] or None
+    intents = get_entities(message, postback, 'intent')
+    return intents and intents[0]['confidence'] > 0.8 and intents[0]['value'] or None
 
 
 def get_card_ids(message, postback):
@@ -29,7 +29,7 @@ def get_card_ids(message, postback):
                 return utils.get_stickers_from_image(attachment['payload']['url'])
     return list(set(
         [str(ent['value']) for ent in get_entities(message, postback, 'number')] +
-        [s for s in message.get('text').split() if s.isdigit()] +
+        [s for s in message.get('text', '').split() if s.isdigit()] +
         utils.get_stickers_from_text([message.get('text')])
     ))
 
