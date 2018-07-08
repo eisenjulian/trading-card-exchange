@@ -72,7 +72,7 @@ def process(messaging_event):
     elif intent == 'menu':
         return [nlg.menu(t)]
     elif intent == 'trades':
-        return [nlg.show_trades(t, sender.get('transactions'))]
+        return nlg.show_trades(t, sender.get('transactions'))
     elif intent == 'add_sticker':
         if cards:
             db.add_collection(sender, cards)
