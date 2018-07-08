@@ -69,10 +69,8 @@ def show_trades(t, trades):
                     {
                         "title": t(
                             'trade',
-                            dict(
-                                card_get=card_get.get('name', card_get['id']),
-                                card_put=card_put.get('name', card_put['id'])
-                            )
+                            card_get=card_get.get('name', card_get['id']),
+                            card_put=card_put.get('name', card_put['id'])
                         ),
                         "buttons": [button(t, '/cancel_transaction')]
                     }
