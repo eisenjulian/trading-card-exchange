@@ -18,8 +18,8 @@ def get_entities(message, postback, name):
 def get_intent(message, postback):
     if postback:
         return postback['payload'][1:].split(' ', 1)[0]
-    intent = get_entities(message, postback, 'intent')[0]
-    return intent and intent['confidence'] > 0.8 and intent['value'] or None
+    intents = get_entities(message, postback, 'intent')
+    return intents and intents[0]['confidence'] > 0.8 and intents[0]['value'] or None
 
 
 def get_card_ids(message, postback):
