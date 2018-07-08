@@ -43,7 +43,7 @@ def get_stickers_from_text(lines):
         for line in clean_lines:
             clean_player = player['clean']
             if len(line) > 4 and line in clean_player and len(line) > score:
-                log('Found match ' + line + ' in  '+ player)
+                log('Found match ' + line + ' in ' + player['team'] + ' ' + player['name'])
                 score = len(line)
                 best_match = [id]
                 # best_match = team + ' ' + player
