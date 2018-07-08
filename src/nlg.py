@@ -1,6 +1,8 @@
 import database as db
 import utils
 
+IMAGE_URL = 'https://storage.googleapis.com/trading-card-exchange/figus/'
+
 def pill(t, intent):
     return {'content_type': 'text', 'title': t(intent), 'payload': intent}
 
@@ -18,9 +20,11 @@ def show_collection(t, collection):
         "attachment":{
             "type":"template",
             "payload":{
+                "image_aspect_ratio": "square",
                 "template_type":"generic",
                 "elements": [
                     {
+                        "image_url": IMAGE_URL + card['id'] + '.jpg',
                         "title": card.get('name', card['id']),
                         "subtitle": card.get('team', card['id']),
                         "buttons": [button(t, '/remove_from_collection')]
@@ -33,11 +37,13 @@ def show_collection(t, collection):
 def show_wanted(t, wanted):
     return [{
         "attachment":{
-            "type":"template",
+            "type": "template",
             "payload":{
+                "image_aspect_ratio": "square",
                 "template_type":"generic",
                 "elements": [
                     {
+                        "image_url": IMAGE_URL + card['id'] + '.jpg',
                         "title": card.get('name', card['id']),
                         "subtitle": card.get('team', card['id']),
                         "buttons": [button(t, '/remove_from_wanted')]
