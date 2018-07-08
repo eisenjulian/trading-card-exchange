@@ -101,6 +101,15 @@ def process(messaging_event):
         else:
             return [{'text': t('no_wishlist'), 'quick_replies': [nlg.pill(t, '/add_wishlist')]}]
 
+    elif intent == 'cancel_transaction':
+        return [nlg.menu(t)]
+
+    elif intent == 'remove_sticker':
+        return [nlg.menu(t)]
+
+    elif intent == 'remove_wishlist':
+        return [nlg.menu(t)]
+
     if last_action == '/ask_sticker':
         if cards:
             db.add_collection(sender, cards)
