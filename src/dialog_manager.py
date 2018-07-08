@@ -6,40 +6,41 @@ import nlg
 import matching
 
 
-def get_entities(message, name):
+def get_entities(message, postback, name):
     try:
+        if postback:
+            return [postback['payload'].split(' ', 1)[1][name]]
         return message['nlp']['entities'][name]
-    except KeyError:
+    except KeyError, IndexError:
         return []
 
 
 def get_intent(message, postback):
     if postback:
-        return postback['payload'][1:].split()[0]
-    intent = get_entities(message, 'intent')[0]
+        return postback['payload'][1:].split(' ', 1)[0]
+    intent = get_entities(message, postback, 'intent')[0]
     return intent and intent['confidence'] > 0.8 and intent['value'] or None
 
 
-def get_card_ids(message):
+def get_card_ids(message, postback):
     if 'attachments' in message:
         for attachment in message['attachments']:
             if attachment['type'] == 'image':
                 return utils.get_stickers_from_image(attachment['payload']['url'])
     return list(set(
-        [str(ent['value']) for ent in get_entities(message, 'number')] +
+        [str(ent['value']) for ent in get_entities(message, postback, 'number')] +
         [s for s in message.get('text').split() if s.isdigit()] +
         utils.get_stickers_from_text([message.get('text')])
     ))
 
 
-def run_match_and_answer(t, user_id, answer):
+def find_match(t, user_id):
     transaction = matching.compute_match(user_id)
     print transaction
-    response = [answer]
     if transaction:
-        response.append({'text': t('new_transaction')})
         db.add_transaction(transaction)
-    return response
+        return [{'text': t('new_transaction')}]
+    return []
 
 
 def run(messaging_event):
@@ -62,6 +63,7 @@ def process(messaging_event):
         del sender['last_action']
     message_text = message.get('text')
     intent = get_intent(message, postback)
+    cards = get_card_ids(message, postback)
 
     if intent == 'start':
         return [{'text': t('welcome')}]
@@ -72,19 +74,21 @@ def process(messaging_event):
     elif intent == 'trades':
         return [nlg.show_trades(t, sender.get('transactions'])]
     elif intent == 'add_sticker':
-        cards = get_card_ids(message)
         if cards:
             db.add_collection(sender, cards)
-            return run_match_and_answer(t, sender['id'], {'text': t('collection_changed')})
+            return [{'text': t('collection_changed')}] +\
+                    nlg.show_collection(t, sender.get('collection')) +\
+                    find_match(t, sender['id'])
         sender['last_action'] = '/ask_sticker'
-        return [{'text': t('/ask_sticker')}]
+        return [{'text': t('ask_sticker')}]
     elif intent == 'add_wishlist':
-        cards = get_card_ids(message)
         if cards:
             db.add_wanted(sender, cards)
-            return run_match_and_answer(t, sender['id'], {'text': t('wanted_changed')})
+            return [{'text': t('wanted_changed')}] +\
+                    nlg.show_wanted(t, sender.get('collection')) +\
+                    find_match(t, sender['id'])
         sender['last_action'] = '/ask_wishlist'
-        return [{'text': t('/ask_wishlist')}]
+        return [{'text': t('ask_wishlist')}]
     elif intent == 'stickers':
         if sender.get('collection'):
             return nlg.show_collection(t, sender.get('collection'))
@@ -98,20 +102,22 @@ def process(messaging_event):
             return [{'text': t('no_wishlist'), 'quick_replies': [nlg.pill(t, '/add_wishlist')]}]
 
     if last_action == '/ask_sticker':
-        cards = get_card_ids(message)
         if cards:
             db.add_collection(sender, cards)
-            return run_match_and_answer(t, sender['id'], {'text': t('collection_changed')})
+            return [{'text': t('collection_changed')}] +\
+                    nlg.show_collection(t, sender.get('collection')) +\
+                    find_match(t, sender['id'])
         sender['last_action'] = '/ask_sticker'
-        return [{'text': t('/ask_sticker')}]
+        return [{'text': t('ask_sticker')}]
 
     if last_action == '/ask_wishlist':
-        cards = get_card_ids(message)
         if cards:
             db.add_wanted(sender, cards)
-            return run_match_and_answer(t, sender['id'], {'text': t('wanted_changed')})
+            return [{'text': t('wanted_changed')}] +\
+                    nlg.show_wanted(t, sender.get('collection')) +\
+                    find_match(t, sender['id'])
         sender['last_action'] = '/ask_wishlist'
-        return [{'text': t('/ask_wishlist')}]
+        return [{'text': t('ask_wishlist')}]
 
     if message_text:
         return [{'text': t('roger')}]
