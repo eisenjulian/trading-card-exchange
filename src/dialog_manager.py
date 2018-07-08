@@ -4,14 +4,15 @@ import texts
 import database as db
 import nlg
 import matching
+import json
 from src.connectors import messenger_sender
 
 def get_entities(message, postback, name):
     try:
         if postback:
-            return [postback['payload'].split(' ', 1)[1][name]]
+            return [json.loads(postback['payload'].split(' ', 1)[1])[name]]
         return message['nlp']['entities'][name]
-    except (KeyError, IndexError):
+    except (KeyError, IndexError, TypeError):
         return []
 
 
