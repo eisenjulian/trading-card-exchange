@@ -34,7 +34,9 @@ def log(msg):  # simple wrapper for logging to stdout on heroku
     sys.stdout.flush()
 
 def get_stickers_from_text(lines):
-    clean_lines = [clean(line) for line in lines]
+    clean_lines = [c for c in [clean(line) for line in lines] if c]
+    if not clean_lines:
+        return []
     best_match = []
     score = 0
     for id, player in cards.iteritems():
