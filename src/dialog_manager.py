@@ -77,7 +77,7 @@ def process(messaging_event):
         return [nlg.menu(t)]
     elif intent == 'trades':
         return nlg.show_trades(t, sender.get('transactions'))
-    elif intent == 'add_sticker':
+    elif intent == 'add_sticker' or last_action == '/ask_sticker':
         if cards:
             db.add_collection(sender, cards)
             return [{'text': t('collection_changed')}] +\
@@ -85,7 +85,7 @@ def process(messaging_event):
                     find_match(t, sender['id'])
         sender['last_action'] = '/ask_sticker'
         return [{'text': t('ask_sticker')}]
-    elif intent == 'add_wishlist':
+    elif intent == 'add_wishlist' or last_action == '/ask_wishlist':
         if cards:
             db.add_wanted(sender, cards)
             return [{'text': t('wanted_changed')}] +\
@@ -114,10 +114,20 @@ def process(messaging_event):
         return [nlg.menu(t)]
 
     elif intent == 'remove_sticker':
-        return [nlg.menu(t)]
+        if cards:
+            db.remove_collection(sender, cards)
+            return [{'text': t('collection_changed')}] +\
+                    nlg.show_collection(t, sender.get('collection'))
+        sender['last_action'] = '/remove_sticker'
+        return [{'text': t('remove_sticker')}]
 
     elif intent == 'remove_wishlist':
-        return [nlg.menu(t)]
+        if cards:
+            db.remove_wanted(sender, cards)
+            return [{'text': t('wanted_changed')}] +\
+                    nlg.show_wanted(t, sender.get('wanted'))
+        sender['last_action'] = '/remove_wishlist'
+        return [{'text': t('remove_wishlist')}]
 
 
     elif '/ask_message' in last_action:
@@ -132,25 +142,6 @@ def process(messaging_event):
         ] for user in users}
         send_batch_messages(batch_messages)
         return [t('message_sent'), nlg.cta()]
-
-
-    elif last_action == '/ask_sticker':
-        if cards:
-            db.add_collection(sender, cards)
-            return [{'text': t('collection_changed')}] +\
-                    nlg.show_collection(t, sender.get('collection')) +\
-                    find_match(t, sender['id'])
-        sender['last_action'] = '/ask_sticker'
-        return [{'text': t('ask_sticker')}]
-
-    elif last_action == '/ask_wishlist':
-        if cards:
-            db.add_wanted(sender, cards)
-            return [{'text': t('wanted_changed')}] +\
-                    nlg.show_wanted(t, sender.get('collection')) +\
-                    find_match(t, sender['id'])
-        sender['last_action'] = '/ask_wishlist'
-        return [{'text': t('ask_wishlist')}]
 
     if message_text:
         return [{'text': t('roger')}]

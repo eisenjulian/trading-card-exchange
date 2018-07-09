@@ -54,8 +54,22 @@ def add_wanted(user, wanted):
 
 def add_one_wanted(user, card_id):
     user['wanted'].append(card_id)
+    set_user(user)
     card = get_card(card_id)
     card['whished'].append(user['id'])
+    set_card(card)
+
+
+def remove_wanted(user, wanted):
+    for card in wanted:
+        remove_one_wanted(user, card)
+
+
+def remove_one_wanted(user, card_id):
+    remove_if_exists(user['wanted'], card_id)
+    set_user(user)
+    card = get_card(card_id)
+    remove_if_exists(card['whished'], user['id'])
     set_card(card)
 
 
@@ -66,8 +80,22 @@ def add_collection(user, collection):
 
 def add_one_collection(user, card_id):
     user['collection'].append(card_id)
+    set_user(user)
     card = get_card(card_id)
     card['owners'].append(user['id'])
+    set_card(card)
+
+
+def remove_collection(user, collection):
+    for card in collection:
+        remove_one_collection(user, card)
+
+
+def remove_one_collection(user, card_id):
+    remove_if_exists(user['collection'], card_id)
+    set_user(user)
+    card = get_card(card_id)
+    remove_if_exists(card['whished'], user['id'])
     set_card(card)
 
 
