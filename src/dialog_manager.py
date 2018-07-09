@@ -129,13 +129,12 @@ def process(messaging_event):
         sender['last_action'] = '/remove_wishlist'
         return [{'text': t('remove_wishlist')}]
 
-
-    elif '/ask_message' in last_action:
+    elif '/ask_message' in (last_action or ''):
         transaction_id = last_action.split()[1]
         transaction = db.get_transaction(transaction_id)
         users = [user for user in transaction['cycle'][1::2] if user != sender['id']]
         batch_messages = {user: [
-            t('message_received'), 
+            t('message_received'),
             {'text': message['text'], 'quick_replies': [
                 nlg.pill(t, '/reply', {'id': transaction_id})
             ]}
