@@ -132,7 +132,7 @@ def process(messaging_event):
         transaction = db.get_transaction(transaction_id)
         users = [user for user in transaction['cycle'][1::2] if user != sender['id']]
         batch_messages = {user: [
-            t('message_received'),
+            {'text': t('message_received')},
             {'text': message['text'], 'quick_replies': [
                 nlg.pill(t, '/reply', {'id': transaction_id})
             ]}
