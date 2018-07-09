@@ -138,7 +138,7 @@ def process(messaging_event):
             ]}
         ] for user in users}
         send_batch_messages(batch_messages)
-        return [t('message_sent'), nlg.cta(t)]
+        return [{'text': t('message_sent')}, nlg.cta(t)]
     elif intent == 'hi':
         return [{'text': t('hi')}, nlg.menu(t)]
 
