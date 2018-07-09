@@ -71,8 +71,6 @@ def process(messaging_event):
 
     if intent == 'start':
         return [{'text': t('welcome')}]
-    elif intent == 'hi':
-        return [{'text': t('hi')}, nlg.menu(t)]
     elif intent == 'menu':
         return [nlg.menu(t)]
     elif intent == 'trades':
@@ -141,6 +139,8 @@ def process(messaging_event):
         ] for user in users}
         send_batch_messages(batch_messages)
         return [t('message_sent'), nlg.cta(t)]
+    elif intent == 'hi':
+        return [{'text': t('hi')}, nlg.menu(t)]
 
     if message_text:
         return [{'text': t('roger')}]
