@@ -140,7 +140,7 @@ def process(messaging_event):
             ]}
         ] for user in users}
         send_batch_messages(batch_messages)
-        return [t('message_sent'), nlg.cta()]
+        return [t('message_sent'), nlg.cta(t)]
 
     if message_text:
         return [{'text': t('roger')}]
