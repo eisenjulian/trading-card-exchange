@@ -130,7 +130,7 @@ def process(messaging_event):
     elif '/ask_message' in (last_action or ''):
         transaction_id = last_action.split()[1]
         transaction = db.get_transaction(transaction_id)
-        users = [user for user in transaction['cycle'][1::2] if user != sender['id']]
+        users = [user for user in transaction['cycle'] if user != sender['id'] and db.is_user(user)]
         batch_messages = {user: [
             {'text': t('message_received')},
             {'text': message['text'], 'quick_replies': [
