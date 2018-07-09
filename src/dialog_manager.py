@@ -11,6 +11,8 @@ def get_entities(message, postback, name):
     try:
         if postback:
             return [json.loads(postback['payload'].split(' ', 1)[1])[name]]
+        if 'quick_reply' in message:
+            return [json.loads(message['quick_reply']['payload'].split(' ', 1)[1])[name]]
         return message['nlp']['entities'][name]
     except (KeyError, IndexError, TypeError):
         return []
@@ -19,6 +21,8 @@ def get_entities(message, postback, name):
 def get_intent(message, postback):
     if postback:
         return postback['payload'][1:].split(' ', 1)[0]
+    if 'quick_reply' in message:
+        return message['quick_reply']['payload'][1:].split(' ', 1)[0]
     intents = get_entities(message, postback, 'intent')
     return intents and intents[0]['confidence'] > 0.8 and intents[0]['value'] or None
 
