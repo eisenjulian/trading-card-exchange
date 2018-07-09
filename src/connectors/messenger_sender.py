@@ -7,6 +7,7 @@ from src.utils import log
 def send_batch_messages(messages):
     params = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
     headers = {"Content-Type": "application/json"}
+    log(u'Sending push to ' + json.dumps(messages.keys()))
     for user_id, messages in messages.iteritems():
         for message in messages:
             data = json.dumps({
