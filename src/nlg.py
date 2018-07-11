@@ -33,7 +33,7 @@ def show_collection(t, collection):
                         "image_url": IMAGE_URL + card['id'] + '.jpg',
                         "title": card.get('name', card['id']),
                         "subtitle": card.get('team', card['id']),
-                        "buttons": [button(t, '/remove_from_collection', {'id': card['id']})]
+                        "buttons": [button(t, '/remove_sticker', {'id': card['id']})]
                     } for card in [utils.cards.get(card_id) for card_id in collection] if card
                 ]
             }
@@ -53,7 +53,7 @@ def show_wanted(t, wanted):
                         "image_url": IMAGE_URL + card['id'] + '.jpg',
                         "title": card.get('name', card['id']),
                         "subtitle": card.get('team', card['id']),
-                        "buttons": [button(t, '/remove_from_wanted', {'id': card['id']})]
+                        "buttons": [button(t, '/remove_wishlist', {'id': card['id']})]
                     } for card in [utils.cards.get(card_id) for card_id in wanted] if card
                 ]
             }
