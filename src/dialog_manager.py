@@ -92,7 +92,7 @@ def process(messaging_event):
         if cards:
             db.add_wanted(sender, cards)
             return [{'text': t('wanted_changed')}] +\
-                    nlg.show_wanted(t, sender.get('collection')) +\
+                    nlg.show_wanted(t, sender.get('wanted')) +\
                     find_match(t, sender['id'])
         sender['last_action'] = '/ask_wishlist'
         return [{'text': t('ask_wishlist')}]
