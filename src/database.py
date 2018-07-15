@@ -44,7 +44,7 @@ def set_card(card):
 
 
 def is_user(id):
-    return int(id) > 1000
+    return int(id) > 10000
 
 
 def add_wanted(user, wanted):

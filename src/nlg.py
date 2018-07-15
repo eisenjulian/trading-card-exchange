@@ -1,7 +1,7 @@
 import utils
 import json
 
-IMAGE_URL = 'https://storage.googleapis.com/trading-card-exchange/figus/'
+IMAGE_URL = 'https://storage.googleapis.com/trading-card-exchange/cartoon/'
 
 def pill(t, intent, entities={}):
     return {'content_type': 'text', 'title': t(intent), 'payload': intent + ' ' + json.dumps(entities)}
