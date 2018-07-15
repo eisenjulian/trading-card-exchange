@@ -8,7 +8,7 @@ db = redis.from_url(os.environ.get("REDIS_URL"))
 
 
 def get_empty_user():
-    return dict(wanted=[], collection=[], transactions=[])
+    return dict(wanted=[], collection=[], transactions={})
 
 
 def get_empty_card(id):
@@ -99,20 +99,21 @@ def remove_one_collection(user, card_id):
     set_card(card)
 
 
-def add_transaction(transaction):
+def add_transaction(cycle):
+    transaction = dict(cycle=cycle)
     transaction_id = md5(json.dumps(transaction)).hexdigest()
     db.set('transaction:{}'.format(transaction_id), json.dumps(transaction))
-    offset = -1 if is_user(transaction[0]) else 0
-    for i in xrange(offset, len(transaction), 2):
-        user_id = transaction[i - 1]
-        card_to_get_id = transaction[i]
-        card_to_put_id = transaction[i - 2]
+    offset = -1 if is_user(cycle[0]) else 0
+    for i in xrange(offset, len(cycle), 2):
+        user_id = cycle[i - 1]
+        card_to_get_id = cycle[i]
+        card_to_put_id = cycle[i - 2]
         add_user_transaction(
             get_user(user_id), card_to_put_id, card_to_get_id, transaction_id
         )
 
 def get_transaction(id):
-    return {'cycle': json.loads(db.get('transaction:' + id))}
+    return json.loads(db.get('transaction:' + id))
 
 
 def remove_if_exists(data, value):
@@ -129,5 +130,5 @@ def add_user_transaction(user, put, get, transaction_id):
     card_to_get = get_card(get)
     remove_if_exists(card_to_get['whished'], user['id'])
     set_card(card_to_get)
-    user['transactions'].append(dict(put=put, get=get, id=transaction_id))
+    user['transactions'][transaction_id] = dict(put=put, get=get)
     set_user(user)

@@ -41,10 +41,9 @@ def get_card_ids(message, postback):
 
 
 def find_match(t, user_id):
-    transaction = matching.compute_match(user_id)
-    print transaction
-    if transaction:
-        db.add_transaction(transaction)
+    cycle = matching.compute_match(user_id)
+    if cycle:
+        db.add_transaction(cycle)
         return [{'text': t('new_transaction')}]
     return []
 
@@ -114,6 +113,15 @@ def process(messaging_event):
         return [{'text': t('ask_message')}]
 
     elif intent == 'cancel_transaction':
+        transaction_id = get_entities(message, postback, 'id')[0]
+        transaction = db.get_transaction(transaction_id)
+        #TODO
+        return [nlg.menu(t)]
+
+    elif intent == 'finish_transaction':
+        transaction_id = get_entities(message, postback, 'id')[0]
+        transaction = db.get_transaction(transaction_id)
+        #TODO
         return [nlg.menu(t)]
 
     elif intent == 'remove_sticker' or last_action == '/remove_sticker':

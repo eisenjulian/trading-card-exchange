@@ -74,11 +74,15 @@ def show_trades(t, trades):
                             card_get=card_get.get('name', card_get['id']),
                             card_put=card_put.get('name', card_put['id'])
                         ),
-                        "buttons": [button(t, '/cancel_transaction'), button(t, '/talk', transaction)]
+                        "buttons": [
+                            button(t, '/cancel_transaction', {'id': transaction_id}),
+                            button(t, '/finish_transaction', {'id': transaction_id}),
+                            button(t, '/talk', {'id': transaction_id})
+                        ]
                     }
                     for card_get, card_put in [
                         (utils.cards.get(transaction['get']), utils.cards.get(transaction['put']))
-                        for transaction in trades
+                        for transaction_id, transaction in trades.iteritems()
                     ] if card_get and card_put
                 ]
             }
