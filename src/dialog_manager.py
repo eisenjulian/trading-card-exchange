@@ -115,21 +115,21 @@ def process(messaging_event):
     elif intent == 'cancel_transaction':
         return [nlg.menu(t)]
 
-    elif intent == 'remove_sticker':
+    elif intent == 'remove_sticker' or last_action == '/remove_sticker':
         if cards:
             db.remove_collection(sender, cards)
             return [{'text': t('collection_changed')}] +\
                     nlg.show_collection(t, sender.get('collection'))
         sender['last_action'] = '/remove_sticker'
-        return [{'text': t('remove_sticker')}]
+        return [{'text': t('ask_sticker')}]
 
-    elif intent == 'remove_wishlist':
+    elif intent == 'remove_wishlist' or last_action == '/remove_wishlist':
         if cards:
             db.remove_wanted(sender, cards)
             return [{'text': t('wanted_changed')}] +\
                     nlg.show_wanted(t, sender.get('wanted'))
         sender['last_action'] = '/remove_wishlist'
-        return [{'text': t('remove_wishlist')}]
+        return [{'text': t('ask_wishlist')}]
 
     elif '/ask_message' in (last_action or ''):
         transaction_id = last_action.split()[1]
