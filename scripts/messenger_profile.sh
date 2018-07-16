@@ -6,11 +6,11 @@ curl -X POST -H "Content-Type: application/json" -d '{
     },
     {
       "locale": "es_LA",
-      "text": "Este es el lugar para juntarse con otros coleccionistas y completar el album del mundial"
+      "text": "Este es el lugar para juntarse con otros coleccionistas y completar el álbum"
     },
     {
       "locale": "es_ES",
-      "text": "Este es el lugar para juntarse con otros coleccionistas y completar el album del mundial"
+      "text": "Este es el lugar para juntarse con otros coleccionistas y completar el álbum"
     }
   ],
   "get_started": {

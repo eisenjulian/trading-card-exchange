@@ -74,7 +74,10 @@ def process(messaging_event):
     cards = get_card_ids(message, postback)
 
     if intent == 'start':
-        return [{'text': t('welcome')}]
+        return [{
+            'text': t('welcome'), 
+            'quick_replies': [nlg.pill(t, '/add_sticker'), nlg.pill(t, '/add_wishlist')]
+        }]
     elif intent == 'menu':
         return [nlg.menu(t)]
     elif intent == 'trades':
