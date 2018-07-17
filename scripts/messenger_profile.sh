@@ -14,7 +14,7 @@ curl -X POST -H "Content-Type: application/json" -d '{
     }
   ],
   "get_started": {
-    "payload": "/start"
+    "payload": "{\"intent\": \"start\"}"
   },
   "persistent_menu": [
     {
@@ -23,17 +23,17 @@ curl -X POST -H "Content-Type: application/json" -d '{
         {
           "title": "My trades",
           "type": "postback",
-          "payload": "/trades"
+          "payload": "{\"intent\": \"trades\"}"
         },
         {
           "title": "Stickers I have",
           "type": "postback",
-          "payload": "/stickers"
+          "payload": "{\"intent\": \"stickers\"}"
         },
         {
           "title": "Stickers I need",
           "type": "postback",
-          "payload": "/wishlist"
+          "payload": "{\"intent\": \"wishlist\"}"
         }
       ]
     },
@@ -43,17 +43,17 @@ curl -X POST -H "Content-Type: application/json" -d '{
         {
           "title": "Mis cambios",
           "type": "postback",
-          "payload": "/trades"
+          "payload": "{\"intent\": \"trades\"}"
         },
         {
           "title": "Figuritas que tengo",
           "type": "postback",
-          "payload": "/stickers"
+          "payload": "{\"intent\": \"stickers\"}"
         },
         {
           "title": "Figuritas que quiero",
           "type": "postback",
-          "payload": "/wishlist"
+          "payload": "{\"intent\": \"wishlist\"}"
         }
       ]
     },
@@ -63,17 +63,17 @@ curl -X POST -H "Content-Type: application/json" -d '{
         {
           "title": "Mis cambios",
           "type": "postback",
-          "payload": "/trades"
+          "payload": "{\"intent\": \"trades\"}"
         },
         {
           "title": "Figuritas que tengo",
           "type": "postback",
-          "payload": "/stickers"
+          "payload": "{\"intent\": \"stickers\"}"
         },
         {
           "title": "Figuritas que quiero",
           "type": "postback",
-          "payload": "/wishlist"
+          "payload": "{\"intent\": \"wishlist\"}"
         }
       ]
     }
