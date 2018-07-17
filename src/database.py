@@ -8,7 +8,9 @@ db = redis.from_url(os.environ.get("REDIS_URL"))
 
 
 def get_empty_user():
-    return dict(wanted=[], collection=[], transactions={})
+    return dict(
+        wanted=[], collection=[], transactions={}, past_transactions=[]
+    )
 
 
 def get_empty_card(id):
@@ -99,9 +101,16 @@ def remove_one_collection(user, card_id):
     set_card(card)
 
 
+def get_repr(cycle):
+    """This representation of cycles should be unique"""
+    m_id = min(cycle)
+    idx = cycle.index(m_id)
+    return str(cycle[idx:] + cycle[:idx])
+
+
 def add_transaction(cycle):
     transaction = dict(cycle=cycle)
-    transaction_id = md5(json.dumps(transaction)).hexdigest()
+    transaction_id = md5(get_repr(cycle)).hexdigest()
     db.set('transaction:{}'.format(transaction_id), json.dumps(transaction))
     offset = -1 if is_user(cycle[0]) else 0
     for i in xrange(offset, len(cycle), 2):
@@ -112,8 +121,13 @@ def add_transaction(cycle):
             get_user(user_id), card_to_put_id, card_to_get_id, transaction_id
         )
 
+
 def get_transaction(id):
     return json.loads(db.get('transaction:' + id))
+
+
+def set_transaction(id, transaction):
+    db.set('transaction:' + id, json.dumps(transaction))
 
 
 def remove_if_exists(data, value):

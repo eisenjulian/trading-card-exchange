@@ -75,7 +75,7 @@ def process(messaging_event):
 
     if intent == 'start':
         return [{
-            'text': t('welcome'), 
+            'text': t('welcome'),
             'quick_replies': [nlg.pill(t, '/add_sticker'), nlg.pill(t, '/add_wishlist')]
         }]
     elif intent == 'menu':
@@ -118,13 +118,27 @@ def process(messaging_event):
     elif intent == 'cancel_transaction':
         transaction_id = get_entities(message, postback, 'id')[0]
         transaction = db.get_transaction(transaction_id)
-        #TODO
+        if 'finished' in transaction:
+            # Not cancelable
+            pass
+        transaction['canceled'] = True
+        db.set_transaction(transaction_id, transaction)
+        db.add_one_wanted(transaction['get'])
+        db.add_one_collection(transaction['put'])
+        del sender['transactions'][transaction_id]
+        sender['past_transactions'].append(transaction_id)
         return [nlg.menu(t)]
 
     elif intent == 'finish_transaction':
         transaction_id = get_entities(message, postback, 'id')[0]
         transaction = db.get_transaction(transaction_id)
-        #TODO
+        if 'canceled' in transaction:
+            # Not finalizable
+            pass
+        transaction['finished'] = True
+        db.set_transaction(transaction_id, transaction)
+        del sender['transactions'][transaction_id]
+        sender['past_transactions'].append(transaction_id)
         return [nlg.menu(t)]
 
     elif intent == 'remove_sticker' or last_action == '/remove_sticker':
