@@ -121,26 +121,26 @@ def process(messaging_event):
         transaction = db.get_transaction(transaction_id)
         if 'finished' in transaction:
             # Not cancelable
-            pass
+            return [t('transaction_finished'), nlg.cta(t)]
         transaction['canceled'] = True
         db.set_transaction(transaction_id, transaction)
         db.add_one_wanted(transaction['get'])
         db.add_one_collection(transaction['put'])
         del sender['transactions'][transaction_id]
         sender['past_transactions'].append(transaction_id)
-        return [nlg.menu(t)]
+        return [t('transaction_canceled'), nlg.cta(t)]
 
     elif intent == 'finish_transaction':
         transaction_id = get_entities(message, postback, 'id')[0]['value']
         transaction = db.get_transaction(transaction_id)
         if 'canceled' in transaction:
             # Not finalizable
-            pass
+            return [t('transaction_canceled'), nlg.cta(t)]
         transaction['finished'] = True
         db.set_transaction(transaction_id, transaction)
         del sender['transactions'][transaction_id]
         sender['past_transactions'].append(transaction_id)
-        return [nlg.menu(t)]
+        return [t('transaction_finished'), nlg.cta(t)]
 
     elif intent == 'remove_sticker' or last_action == 'remove_sticker':
         if cards:
