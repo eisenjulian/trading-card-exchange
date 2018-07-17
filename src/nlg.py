@@ -4,21 +4,25 @@ import json
 IMAGE_URL = 'https://storage.googleapis.com/trading-card-exchange/cartoon/'
 
 def pill(t, intent, entities={}):
-    return {'content_type': 'text', 'title': t(intent), 'payload': intent + ' ' + json.dumps(entities)}
+    payload = {'intent': intent}
+    payload.update(entities)
+    return {'content_type': 'text', 'title': t(intent), 'payload': json.dumps(payload)}
 
 def button(t, intent, entities={}):
-    return {'type': 'postback', 'title': t(intent), 'payload': intent + ' ' + json.dumps(entities)}
+    payload = {'intent': intent}
+    payload.update(entities)
+    return {'type': 'postback', 'title': t(intent), 'payload': json.dumps(payload)}
 
 def menu(t):
     return {
         'text': t('menu'),
-        'quick_replies': [pill(t, '/trades'), pill(t, '/stickers'), pill(t, '/wishlist')]
+        'quick_replies': [pill(t, 'trades'), pill(t, 'stickers'), pill(t, 'wishlist')]
     }
 
 def cta(t):
     return {
         'text': t('cta'),
-        'quick_replies': [pill(t, '/trades'), pill(t, '/stickers'), pill(t, '/wishlist')]
+        'quick_replies': [pill(t, 'trades'), pill(t, 'stickers'), pill(t, 'wishlist')]
     }
 
 def show_collection(t, collection):
@@ -33,12 +37,12 @@ def show_collection(t, collection):
                         "image_url": IMAGE_URL + card['id'] + '.jpg',
                         "title": card.get('name', card['id']),
                         "subtitle": card.get('team', card['id']),
-                        "buttons": [button(t, '/remove_sticker', {'id': card['id']})]
+                        "buttons": [button(t, 'remove_sticker', {'number': card['id']})]
                     } for card in [utils.cards.get(card_id) for card_id in collection] if card
                 ]
             }
         },
-        "quick_replies": [pill(t, '/add_sticker')]
+        "quick_replies": [pill(t, 'add_sticker')]
     }]
 
 def show_wanted(t, wanted):
@@ -53,12 +57,12 @@ def show_wanted(t, wanted):
                         "image_url": IMAGE_URL + card['id'] + '.jpg',
                         "title": card.get('name', card['id']),
                         "subtitle": card.get('team', card['id']),
-                        "buttons": [button(t, '/remove_wishlist', {'id': card['id']})]
+                        "buttons": [button(t, 'remove_wishlist', {'number': card['id']})]
                     } for card in [utils.cards.get(card_id) for card_id in wanted] if card
                 ]
             }
         },
-        "quick_replies": [pill(t, '/add_wishlist')]
+        "quick_replies": [pill(t, 'add_wishlist')]
     }]
 
 def show_trades(t, trades):
@@ -75,9 +79,9 @@ def show_trades(t, trades):
                             card_put=card_put.get('name', card_put['id'])
                         ),
                         "buttons": [
-                            button(t, '/cancel_transaction', {'id': transaction_id}),
-                            button(t, '/finish_transaction', {'id': transaction_id}),
-                            button(t, '/talk', {'id': transaction_id})
+                            button(t, 'cancel_transaction', {'id': transaction_id}),
+                            button(t, 'finish_transaction', {'id': transaction_id}),
+                            button(t, 'talk', {'id': transaction_id})
                         ]
                     }
                     for card_get, card_put in [
