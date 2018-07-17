@@ -26,6 +26,8 @@ def cta(t):
     }
 
 def show_collection(t, collection):
+    if not collection:
+        return [{'text': t('no_stickers'), 'quick_replies': [pill(t, 'add_sticker')]}]
     return [{
         "attachment": {
             "type": "template",
@@ -38,7 +40,7 @@ def show_collection(t, collection):
                         "title": card.get('name', card['id']),
                         "subtitle": card.get('team', card['id']),
                         "buttons": [button(t, 'remove_sticker', {'number': card['id']})]
-                    } for card in [utils.cards.get(card_id) for card_id in collection] if card
+                    } for card in [utils.cards.get(card_id) for card_id in collection[-10:]] if card
                 ]
             }
         },
@@ -46,6 +48,8 @@ def show_collection(t, collection):
     }]
 
 def show_wanted(t, wanted):
+    if not wanted:
+        return [{'text': t('no_wishlist'), 'quick_replies': [pill(t, 'add_wishlist')]}]
     return [{
         "attachment": {
             "type": "template",
@@ -58,7 +62,7 @@ def show_wanted(t, wanted):
                         "title": card.get('name', card['id']),
                         "subtitle": card.get('team', card['id']),
                         "buttons": [button(t, 'remove_wishlist', {'number': card['id']})]
-                    } for card in [utils.cards.get(card_id) for card_id in wanted] if card
+                    } for card in [utils.cards.get(card_id) for card_id in wanted[-10:]] if card
                 ]
             }
         },
@@ -66,6 +70,8 @@ def show_wanted(t, wanted):
     }]
 
 def show_trades(t, trades):
+    if not trades:
+        return [{'text': t('no_trades'), 'quick_replies': [pill(t, 'add_wishlist'), pill(t, 'add_sticker')]}]
     return [{
         "attachment": {
             "type": "template",
@@ -86,7 +92,7 @@ def show_trades(t, trades):
                     }
                     for card_get, card_put in [
                         (utils.cards.get(transaction['get']), utils.cards.get(transaction['put']))
-                        for transaction_id, transaction in trades.iteritems()
+                        for transaction_id, transaction in trades.iteritems()[-10:]
                     ] if card_get and card_put
                 ]
             }

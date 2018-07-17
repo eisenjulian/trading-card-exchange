@@ -100,16 +100,10 @@ def process(messaging_event):
         sender['last_action'] = 'ask_wishlist'
         return [{'text': t('ask_wishlist')}]
     elif intent == 'stickers':
-        if sender.get('collection'):
-            return nlg.show_collection(t, sender.get('collection'))
-        else:
-            return [{'text': t('no_stickers'), 'quick_replies': [nlg.pill(t, 'add_sticker')]}]
+        return nlg.show_collection(t, sender.get('collection'))
 
     elif intent == 'wishlist':
-        if sender.get('wanted'):
-            return nlg.show_wanted(t, sender.get('wanted'))
-        else:
-            return [{'text': t('no_wishlist'), 'quick_replies': [nlg.pill(t, 'add_wishlist')]}]
+        return nlg.show_wanted(t, sender.get('wanted'))
 
     elif intent == 'talk' or intent == 'reply':
         transaction_id = get_entities(message, postback, 'id')[0]['value']
