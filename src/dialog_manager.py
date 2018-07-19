@@ -102,7 +102,7 @@ def process(messaging_event):
             db.add_collection(sender, cards)
             return [{'text': t('collection_changed')}] +\
                     nlg.show_collection(t, sender.get('collection')) +\
-                    find_match(t, sender['id'])
+                    find_match(t, sender)
         sender['last_action'] = 'ask_sticker'
         return [{'text': t('ask_sticker')}]
     elif intent == 'add_wishlist' or last_action == 'ask_wishlist':
@@ -110,7 +110,7 @@ def process(messaging_event):
             db.add_wanted(sender, cards)
             return [{'text': t('wanted_changed')}] +\
                     nlg.show_wanted(t, sender.get('wanted')) +\
-                    find_match(t, sender['id'])
+                    find_match(t, sender)
         sender['last_action'] = 'ask_wishlist'
         return [{'text': t('ask_wishlist')}]
 
