@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import re
 import utils
 import texts
@@ -47,6 +48,10 @@ def find_match(t, user_id):
         db.add_transaction(cycle)
         return [{'text': t('new_transaction')}]
     return []
+
+def get_emoji(user_id):
+    emojis = [u'🐶', u'🐱', u'🐭', u'🐹', u'🐰', u'🦊', u'🐻', u'🐼', u'🐨', u'🐯', u'🦁', u'🐮', u'🐷', u'🐸', u'🐵', u'🐔', u'🐧', u'🐦', u'🐤', u'🦆', u'🦅', u'🦉', u'🦇', u'🐺', u'🐗', u'🐴', u'🦄', u'🐝', u'🦋', u'🐌', u'🐞', u'🐢', u'🐍', u'🦎', u'🐙', u'🐠', u'🐬', u'🐳', u'🐊', u'🦓', u'🦏']
+    return emojis[hash(user_id) % len(emojis)]
 
 def send_batch_messages(messages):
     # this should enqueue this messages to be send by another process
@@ -157,7 +162,7 @@ def process(messaging_event):
         transaction = db.get_transaction(transaction_id)
         users = [user for user in transaction['cycle'] if user != sender['id'] and db.is_user(user)]
         batch_messages = {user: [
-            {'text': t('message_received')},
+            {'text': get_emoji(sender['id']) + ' ' + t('message_received')},
             {'text': message['text'], 'quick_replies': [
                 nlg.pill(t, 'reply', {'id': transaction_id})
             ]}
