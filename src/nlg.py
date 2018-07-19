@@ -1,5 +1,6 @@
 import utils
 import json
+from itertools import islice
 
 IMAGE_URL = 'https://storage.googleapis.com/trading-card-exchange/cartoon/'
 
@@ -92,7 +93,7 @@ def show_trades(t, trades):
                     }
                     for card_get, card_put in [
                         (utils.cards.get(transaction['get']), utils.cards.get(transaction['put']))
-                        for transaction_id, transaction in trades.iteritems()[-10:]
+                        for transaction_id, transaction in islice(10, trades.iteritems())
                     ] if card_get and card_put
                 ]
             }
