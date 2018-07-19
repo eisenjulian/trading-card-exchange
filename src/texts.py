@@ -10,19 +10,49 @@ langs = {
         'hi': [u'Hello {first_name}', u'Hi there {first_name}', u'Hey {first_name}'],
         'wanted_changed': u'Great! We updated the stickers you want',
         'collection_changed': u'Awesome! We updated the stickers you have',
-        'no_trades': u'You have no trades',
-        'no_stickers': u'You have no stickers',
-        'no_wishlist': u'You have no cards in your wishlist',
-        'new_transaction': u'We\'ve found a new match!',
+        'no_trades': [u'You have no trades', u'Nothing to show in your trades'],
+        'no_stickers': [
+            u'You have no stickers',
+            u'Nothing to show in your collection',
+            u'No stickers in your collection'
+        ],
+        'no_wishlist': [
+            u'You have no cards in your wishlist',
+            u'Nothing to show in your wishlist',
+            u'No stickers in your wishlist'
+        ],
+        'new_transaction': [
+            u'We\'ve found a new match!',
+            u'New trading opportunity!'
+        ],
         'transaction_finished': u'The transaction has been finished',
         'transaction_canceled': u'The transaction has been canceled',
-        'ask_sticker': u'Which one? You can tell me the number or send a pic',
-        'ask_wishlist': u'Which one? You can tell me the number or send a pic',
-        'ask_message': u'What do you wanna say to this group?',
-        'trade': u'Trade {card_put} by {card_get}',
-        'cta': [u'What\'s next?', u'What else can I help you with?'],
-        'message_sent': u'Awesome, we forwarded your message',
+        'ask_sticker': [
+            u'Which one? You can tell me the number or send a pic',
+            u'Send me a number or a pick and I\'ll add it to your collection'
+        ],
+        'ask_wishlist': [
+            u'Which one? You can tell me the number or send a pic',
+            u'Send me a number or a pick and I\'ll add it to your wishlist'
+        ],
+        'ask_message': [
+            u'What do you wanna say to this group?',
+            u'What is your message for the group',
+            u'Give me your message and I\'ll forward it to the group'
+        ],
+        'cta': [
+            u'What\'s next?',
+            u'What else can I help you with?'
+            u'What can I do for you now?'
+        ],
+        'message_sent': [
+            u'Awesome, we forwarded your message',
+            u'Your message has been delivered',
+            u'We\'ve passed along your message'
+        ],
         'message_received': u'{first_name} says:',
+        # This are "menu" items, it makes sense to have only one option
+        'trade': u'Trade {card_put} by {card_get}',
         'remove_sticker': u'I don\'t have it',
         'remove_wishlist': u'I don\'t want it',
         'cancel_transaction': u'Cancel it',
@@ -37,24 +67,56 @@ langs = {
     },
     'es': {
         'welcome': u'¡Hola {first_name}! Estoy para ayudarte a encontrar gente para cambiar figus y completar tu álbum.',
-        'roger': u'Roger that! {first_name}',
+        'roger': u'Entendido! {first_name}',
         'menu': u'Elegí una de las siguientes opciones',
         'hi': [u'Hola {first_name}', u'Hola hola {first_name}', u'Buenas! {first_name}'],
         'wanted_changed': u'¡Buenísimo! Cambiamos las figuritas que querés',
         'collection_changed': u'¡Bárbaro! Cambiamos las figuritas que querés',
-        'no_trades': u'No tienes ningún cambio',
-        'no_stickers': u'No tienes ninguna figurita',
-        'no_wishlist': u'No tienes figuritas que quieras',
-        'new_transaction': u'Encontramos un nuevo intercambio!',
+        'no_trades': [
+            u'No tienes ningún cambio', u'Nada que mostrar en tus cambios'
+        ],
+        'no_stickers': [
+            u'No tienes ninguna figurita',
+            u'No hay figuritas que mostrar en tu colección',
+            u'Tu colección está vacia'
+        ],
+        'no_wishlist': [
+            u'No tienes figuritas que quieras',
+            u'No hay figuritas en tu lista de deseos',
+            u'Tu lista de deseos está vacia'
+        ],
+        'new_transaction': [
+            u'Encontramos un nuevo intercambio!',
+            u'Tienes una nueva oportunidad de intercambio!'
+            u'Prepárate, un nuevo intercambio está en camino'
+        ],
         'transaction_finished': u'La transacción ha sido finalizada',
         'transaction_canceled': u'La transacción ha sido canceleda',
-        'ask_sticker': u'¿Cuál? Dime el número, o una foto',
-        'ask_wishlist': u'¿Cuál? Dime el número o una foto',
-        'ask_message': u'¿Qué quieres decirle a este grupo?',
-        'trade': u'Cambiar {card_put} por {card_get}',
-        'cta': [u'¿Cómo seguimos?', u'¿Con qué más te ayudo?'],
-        'message_sent': u'Genial, ya enviamos tu mensaje',
+        'ask_sticker': [
+            u'¿Cuál? Dime el número, o una foto',
+            u'Mándame un número o una foto y la agrego a tu colección'
+        ],
+        'ask_wishlist': [
+            u'¿Cuál? Dime el número o una foto',
+            u'Mándame un número o una foto y la agrego a tu lista de deseos'
+        ],
+        'ask_message': [
+            u'¿Qué quieres decirle a este grupo?',
+            u'Dame tu mensaje y lo reenviaré al grupo',
+            u'¿Cuál es tu mensaje para el grupo?'
+        ],
+        'cta': [
+            u'¿Cómo seguimos?',
+            u'¿Con qué más te ayudo?',
+            u'¿Qué otra cosa puedo hacer por ti?'],
+        'message_sent': [
+            u'Genial, ya enviamos tu mensaje',
+            u'Listo, tu mensaje ya fue reenviado',
+            u'Ya transmitimos tu mensaje'
+        ],
         'message_received': u'{first_name} dice:',
+        # This are "menu" items, it makes sense to have only one option
+        'trade': u'Cambiar {card_put} por {card_get}',
         'remove_sticker': u'Ya no la tengo',
         'remove_wishlist': u'Ya no la quiero',
         'cancel_transaction': u'Cancelarla',
@@ -69,11 +131,12 @@ langs = {
     }
 }
 
+
 def get_texts(user):
     lang = 'en'
     if 'locale' in user:
         lang = user['locale'].lower()[:2]
-    if not lang in langs:
+    if lang not in langs:
         lang = 'en'
 
     def get_text(key, **params):
