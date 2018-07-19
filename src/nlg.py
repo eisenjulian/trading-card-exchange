@@ -93,7 +93,7 @@ def show_trades(t, trades):
                     }
                     for card_get, card_put in [
                         (utils.cards.get(transaction['get']), utils.cards.get(transaction['put']))
-                        for transaction_id, transaction in islice(10, trades.iteritems())
+                        for transaction_id, transaction in islice(trades.iteritems(), 10)
                     ] if card_get and card_put
                 ]
             }
