@@ -42,10 +42,10 @@ def get_card_ids(message, postback):
     ))
 
 
-def find_match(t, user_id):
-    cycle = matching.compute_match(user_id)
+def find_match(t, sender):
+    cycle = matching.compute_match(sender['id'])
     if cycle:
-        db.add_transaction(cycle)
+        db.add_transaction(sender, cycle)
         return [{'text': t('new_transaction')}]
     return []
 

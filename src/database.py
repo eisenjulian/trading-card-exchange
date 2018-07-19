@@ -108,7 +108,7 @@ def get_repr(cycle):
     return str(cycle[idx:] + cycle[:idx])
 
 
-def add_transaction(cycle):
+def add_transaction(user, cycle):
     print cycle
     transaction = dict(cycle=cycle)
     transaction_id = md5(get_repr(cycle)).hexdigest()
@@ -119,9 +119,15 @@ def add_transaction(cycle):
         print i, user_id
         card_to_get_id = cycle[i]
         card_to_put_id = cycle[i - 2]
-        add_user_transaction(
-            get_user(user_id), card_to_put_id, card_to_get_id, transaction_id
-        )
+        if user['id'] == user_id:
+            add_user_transaction(
+                user, card_to_put_id, card_to_get_id, transaction_id
+            )
+        else:
+            add_user_transaction(
+                get_user(user_id), card_to_put_id,
+                card_to_get_id, transaction_id
+            )
 
 
 def get_transaction(id):
