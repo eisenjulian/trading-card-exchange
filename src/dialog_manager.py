@@ -84,10 +84,19 @@ def process(messaging_event):
             'text': t('welcome'),
             'quick_replies': [nlg.pill(t, 'add_sticker'), nlg.pill(t, 'add_wishlist')]
         }]
+
     elif intent == 'menu':
         return [nlg.menu(t)]
+
     elif intent == 'trades':
         return nlg.show_trades(t, sender.get('transactions'))
+
+    elif intent == 'stickers':
+        return nlg.show_collection(t, sender.get('collection'))
+
+    elif intent == 'wishlist':
+        return nlg.show_wanted(t, sender.get('wanted'))
+
     elif intent == 'add_sticker' or last_action == 'ask_sticker':
         if cards:
             db.add_collection(sender, cards)
@@ -104,11 +113,6 @@ def process(messaging_event):
                     find_match(t, sender['id'])
         sender['last_action'] = 'ask_wishlist'
         return [{'text': t('ask_wishlist')}]
-    elif intent == 'stickers':
-        return nlg.show_collection(t, sender.get('collection'))
-
-    elif intent == 'wishlist':
-        return nlg.show_wanted(t, sender.get('wanted'))
 
     elif intent == 'talk' or intent == 'reply':
         transaction_id = get_entities(message, postback, 'id')[0]['value']
@@ -169,6 +173,7 @@ def process(messaging_event):
         ] for user in users}
         send_batch_messages(batch_messages)
         return [{'text': t('message_sent')}, nlg.cta(t)]
+
     elif intent == 'hi':
         return [{'text': t('hi')}, nlg.menu(t)]
 
