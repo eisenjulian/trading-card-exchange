@@ -17,7 +17,6 @@ def compute_match(start_user_id=None):
     if start_user_id is None:
         return cycles
     for cycle in cycles:
-        print cycle
         if start_user_id in cycle:
             return cycle
     return None

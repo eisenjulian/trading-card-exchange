@@ -116,6 +116,7 @@ def add_transaction(cycle):
     offset = -1 if is_user(cycle[0]) else 0
     for i in xrange(offset, len(cycle) + offset, 2):
         user_id = cycle[i - 1]
+        print i, user_id
         card_to_get_id = cycle[i]
         card_to_put_id = cycle[i - 2]
         add_user_transaction(
@@ -137,6 +138,7 @@ def remove_if_exists(data, value):
 
 
 def add_user_transaction(user, put, get, transaction_id):
+    print user, put, get
     remove_if_exists(user['wanted'], get)
     remove_if_exists(user['collection'], put)
     card_to_put = get_card(put)
