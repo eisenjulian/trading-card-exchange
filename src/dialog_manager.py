@@ -123,8 +123,8 @@ def process(messaging_event):
             return [t('transaction_finished'), nlg.cta(t)]
         transaction['canceled'] = True
         db.set_transaction(transaction_id, transaction)
-        db.add_one_wanted(transaction['get'])
-        db.add_one_collection(transaction['put'])
+        db.add_one_wanted(sender['transactions'][transaction_id]['get'])
+        db.add_one_collection(sender['transactions'][transaction_id]['put'])
         del sender['transactions'][transaction_id]
         sender['past_transactions'].append(transaction_id)
         return [t('transaction_canceled'), nlg.cta(t)]
