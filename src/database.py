@@ -109,11 +109,12 @@ def get_repr(cycle):
 
 
 def add_transaction(cycle):
+    print cycle
     transaction = dict(cycle=cycle)
     transaction_id = md5(get_repr(cycle)).hexdigest()
     db.set('transaction:{}'.format(transaction_id), json.dumps(transaction))
     offset = -1 if is_user(cycle[0]) else 0
-    for i in xrange(offset, len(cycle), 2):
+    for i in xrange(offset, len(cycle) + offset, 2):
         user_id = cycle[i - 1]
         card_to_get_id = cycle[i]
         card_to_put_id = cycle[i - 2]
