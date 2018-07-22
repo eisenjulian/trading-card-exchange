@@ -45,7 +45,7 @@ def show_collection(t, collection):
                 ]
             }
         },
-        "quick_replies": [pill(t, 'add_sticker')]
+        "quick_replies": [pill(t, 'add_sticker'), pill(t, 'add_wishlist')]
     }]
 
 def show_wanted(t, wanted):
@@ -67,7 +67,7 @@ def show_wanted(t, wanted):
                 ]
             }
         },
-        "quick_replies": [pill(t, 'add_wishlist')]
+        "quick_replies": [pill(t, 'add_wishlist'), pill(t, 'add_sticker')]
     }]
 
 def show_trades(t, trades):
