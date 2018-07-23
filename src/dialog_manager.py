@@ -177,5 +177,10 @@ def process(messaging_event):
     elif intent == 'hi':
         return [{'text': t('hi')}, nlg.menu(t)]
 
-    if message_text:
-        return [{'text': t('roger')}]
+    elif cards:
+        db.add_collection(sender, cards)
+        return [{'text': t('collection_changed')}] +\
+                nlg.show_collection(t, sender.get('collection')) +\
+                find_match(t, sender)
+
+    return [{'text': t('default')}, nlg.menu(t)]
