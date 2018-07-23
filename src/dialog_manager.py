@@ -46,7 +46,7 @@ def find_match(t, sender):
     cycle = matching.compute_match(sender['id'])
     if cycle:
         db.add_transaction(sender, cycle)
-        return [{'text': t('new_transaction')}]
+        return nlg.new_trade(t)
     return []
 
 def get_emoji(user_id):

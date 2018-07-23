@@ -2,7 +2,8 @@ import utils
 import json
 from itertools import islice
 
-IMAGE_URL = 'https://storage.googleapis.com/trading-card-exchange/cartoon/'
+BASE_URL = 'https://storage.googleapis.com/trading-card-exchange/'
+IMAGE_URL = BASE_URL + 'cartoon/'
 
 def pill(t, intent, entities={}):
     payload = {'intent': intent}
@@ -25,6 +26,17 @@ def cta(t):
         'text': t('cta'),
         'quick_replies': [pill(t, 'trades'), pill(t, 'stickers'), pill(t, 'wishlist')]
     }
+
+def new_trade(t):
+    return [
+        {'text': t('new_transaction')},
+        {'attachment': {
+            'type': 'image',
+            'payload': {
+                'url': BASE_URL + 'public/new_trade.gif',
+            }
+        }}
+    ]
 
 def show_collection(t, collection):
     if not collection:
