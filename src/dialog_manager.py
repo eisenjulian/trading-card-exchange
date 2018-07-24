@@ -64,7 +64,7 @@ def run(messaging_event):
     db.set_user(sender)
     return messages
 
-def get_replies_from_testers(t, users):
+def get_replies_from_testers(t, users, transaction_id):
     replies = []
     for user_id in users:
         user = db.get_user(user_id)
@@ -73,6 +73,10 @@ def get_replies_from_testers(t, users):
                 {'text': get_emoji(user_id) + ' ' + t('message_received', name=user['first_name'])},
                 {'text': t('tester', name=user['first_name'])}
             ])
+    if replies:
+        replies[-1]['quick_replies'] = [
+            nlg.pill(t, 'reply', {'id': transaction_id})
+        ]
     return replies
 
 def process(messaging_event):
@@ -106,7 +110,12 @@ def process(messaging_event):
             ]}
         ] for user in users}
         send_batch_messages(batch_messages)
-        return [{'text': t('message_sent')}, nlg.cta(t)] + get_replies_from_testers(t, users)
+        # Only for mock users interaction and testing
+        replies = get_replies_from_testers(t, users, transaction_id)
+        if replies:
+            return [{'text': t('message_sent')}] + replies
+        #############################################
+        return [{'text': t('message_sent')}, nlg.cta(t)]
 
     elif intent == 'menu':
         return [nlg.menu(t)]
