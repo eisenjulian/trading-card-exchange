@@ -70,7 +70,7 @@ def get_replies_from_testers(t, users):
         user = db.get_user(user_id)
         if 'tester' in user:
             replies.extend([
-                {'text': get_emoji(user_id) + ' ' + t('message_received')},
+                {'text': get_emoji(user_id) + ' ' + t('message_received', name=user['first_name'])},
                 {'text': t('tester', name=user['first_name'])}
             ])
     return replies
@@ -100,7 +100,7 @@ def process(messaging_event):
         transaction = db.get_transaction(transaction_id)
         users = [user for user in transaction['cycle'] if user != sender['id'] and db.is_user(user)]
         batch_messages = {user: [
-            {'text': get_emoji(sender['id']) + ' ' + t('message_received')},
+            {'text': get_emoji(sender['id']) + ' ' + t('message_received', name=sender['first_name'])},
             {'text': message_text, 'quick_replies': [
                 nlg.pill(t, 'reply', {'id': transaction_id})
             ]}

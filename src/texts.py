@@ -59,7 +59,7 @@ langs = {
         ],
         'cta': [
             u'What\'s next?',
-            u'What else can I help you with?'
+            u'What else can I help you with?',
             u'What can I do for you now?'
         ],
         'message_sent': [
@@ -67,7 +67,7 @@ langs = {
             u'Your message has been delivered',
             u'We\'ve passed along your message'
         ],
-        'message_received': u'{first_name} says:',
+        'message_received': u'{name} says:',
         'tester': u'Hey! My name is {name} and I\'d be happy to trade with you',
         # This are "menu" items, it makes sense to have only one option
         'trade': u'Trade {card_put} by {card_get}',
@@ -106,7 +106,7 @@ langs = {
         ],
         'new_transaction': [
             u'Encontramos un nuevo intercambio!',
-            u'Tienes una nueva oportunidad de intercambio!'
+            u'Tienes una nueva oportunidad de intercambio!',
             u'Prepárate, un nuevo intercambio está en camino'
         ],
         'transaction_line_from_you': [
@@ -149,7 +149,7 @@ langs = {
             u'Listo, tu mensaje ya fue reenviado',
             u'Ya transmitimos tu mensaje'
         ],
-        'message_received': u'{first_name} dice:',
+        'message_received': u'{name} dice:',
         'tester': u'Hola! Mi nombre es {name} y me gustaría cambiar figuritas contigo',
         # This are "menu" items, it makes sense to have only one option
         'trade': u'Cambiar {card_put} por {card_get}',
