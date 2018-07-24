@@ -36,7 +36,7 @@ def new_trade(t, transaction_id, desc):
                 'url': BASE_URL + 'public/new_trade.gif',
             }
         }}
-    ] + [{'text': desc_line} for line in desc] + [{'text': t('transaction_cta'), 'quick_replies': [
+    ] + [{'text': line} for line in desc] + [{'text': t('transaction_cta'), 'quick_replies': [
         pill(t, 'talk', {'id': transaction_id})
     ]}]
 
