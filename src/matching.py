@@ -17,6 +17,6 @@ def compute_match(start_user_id=None):
     if start_user_id is None:
         return cycles
     for cycle in cycles:
-        if start_user_id in cycle:
+        if start_user_id in cycle and len(cycle) > 2:
             return cycle
     return None
