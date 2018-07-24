@@ -95,13 +95,13 @@ def process(messaging_event):
             'quick_replies': [nlg.pill(t, 'add_sticker'), nlg.pill(t, 'add_wishlist')]
         }]
 
-    elif 'ask_message' in (last_action or ''):
+    elif message_text and 'ask_message' in (last_action or ''):
         transaction_id = last_action.split()[1]
         transaction = db.get_transaction(transaction_id)
         users = [user for user in transaction['cycle'] if user != sender['id'] and db.is_user(user)]
         batch_messages = {user: [
             {'text': get_emoji(sender['id']) + ' ' + t('message_received')},
-            {'text': message['text'], 'quick_replies': [
+            {'text': message_text, 'quick_replies': [
                 nlg.pill(t, 'reply', {'id': transaction_id})
             ]}
         ] for user in users}
