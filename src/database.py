@@ -108,12 +108,14 @@ def get_repr(cycle):
     return str(cycle[idx:] + cycle[:idx])
 
 
-def add_transaction(user, cycle):
+def add_transaction(t, user, cycle):
     print cycle
     transaction = dict(cycle=cycle)
     transaction_id = md5(get_repr(cycle)).hexdigest()
     db.set('transaction:{}'.format(transaction_id), json.dumps(transaction))
     offset = -1 if is_user(cycle[0]) else 0
+    all_users = {}
+    all_users[user['id']] = user
     for i in xrange(offset, len(cycle) + offset, 2):
         user_id = cycle[i - 1]
         print i, user_id
@@ -124,11 +126,29 @@ def add_transaction(user, cycle):
                 user, card_to_put_id, card_to_get_id, transaction_id
             )
         else:
+            all_users[user_id] = get_user(user_id)
             add_user_transaction(
-                get_user(user_id), card_to_put_id,
+                all_users[user_id], card_to_put_id,
                 card_to_get_id, transaction_id
             )
+    return transaction_id, get_transaction_desc(t, cycle, user, all_users)
 
+def get_transaction_desc(t, cycle, user, all_users):
+    def get_user_name(i):
+        user_id = cycle[i]
+        user_data = all_users.get(user_id, {})
+        return user_data.get('first_name', '?')
+
+    offset = -1 if is_user(cycle[0]) else 0
+    return [
+        t(
+            'transaction_line' + 
+            '_from_you' if cycle[i - 3] == user['id'] else ('_to_you' if cycle[i - 1] == user['id'] else ''), 
+            name_from=get_user_name(i - 3), 
+            name_to=get_user_name(i - 1), 
+            card=utils.cards.get(cycle[i - 2], {}).get('name', cycle[i - 2])
+        ) for i in xrange(offset, len(cycle) + offset, 2)
+    ]
 
 def get_transaction(id):
     return json.loads(db.get('transaction:' + id))

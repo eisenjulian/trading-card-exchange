@@ -45,8 +45,8 @@ def get_card_ids(message, postback):
 def find_match(t, sender):
     cycle = matching.compute_match(sender['id'])
     if cycle:
-        db.add_transaction(sender, cycle)
-        return nlg.new_trade(t)
+        transaction_id, desc = db.add_transaction(t, sender, cycle)
+        return nlg.new_trade(t, transaction_id, desc)
     return []
 
 def get_emoji(user_id):
@@ -84,6 +84,19 @@ def process(messaging_event):
             'text': t('welcome'),
             'quick_replies': [nlg.pill(t, 'add_sticker'), nlg.pill(t, 'add_wishlist')]
         }]
+
+    elif 'ask_message' in (last_action or ''):
+        transaction_id = last_action.split()[1]
+        transaction = db.get_transaction(transaction_id)
+        users = [user for user in transaction['cycle'] if user != sender['id'] and db.is_user(user)]
+        batch_messages = {user: [
+            {'text': get_emoji(sender['id']) + ' ' + t('message_received')},
+            {'text': message['text'], 'quick_replies': [
+                nlg.pill(t, 'reply', {'id': transaction_id})
+            ]}
+        ] for user in users}
+        send_batch_messages(batch_messages)
+        return [{'text': t('message_sent')}, nlg.cta(t)]
 
     elif intent == 'menu':
         return [nlg.menu(t)]
@@ -160,19 +173,6 @@ def process(messaging_event):
                     nlg.show_wanted(t, sender.get('wanted'))
         sender['last_action'] = 'remove_wishlist'
         return [{'text': t('ask_wishlist')}]
-
-    elif 'ask_message' in (last_action or ''):
-        transaction_id = last_action.split()[1]
-        transaction = db.get_transaction(transaction_id)
-        users = [user for user in transaction['cycle'] if user != sender['id'] and db.is_user(user)]
-        batch_messages = {user: [
-            {'text': get_emoji(sender['id']) + ' ' + t('message_received')},
-            {'text': message['text'], 'quick_replies': [
-                nlg.pill(t, 'reply', {'id': transaction_id})
-            ]}
-        ] for user in users}
-        send_batch_messages(batch_messages)
-        return [{'text': t('message_sent')}, nlg.cta(t)]
 
     elif intent == 'hi':
         return [{'text': t('hi')}, nlg.menu(t)]

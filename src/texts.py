@@ -26,6 +26,22 @@ langs = {
             u'We\'ve found a new match!',
             u'New trading opportunity!'
         ],
+        'transaction_line_from_you': [
+            u'You can give {card} to {name_to}',
+            u'You have {card}, which will go to {name_to}',
+            u'{card} will go from you to {name_to}'
+        ],
+        'transaction_line_to_you': [
+            u'{name_from} will give you {card}',
+            u'{name_from} has {card}, which will go to you',
+            u'{card} will go from {name_from} to you'
+        ],
+        'transaction_line': [
+            u'{name_from} will give {card} to {name_to}',
+            u'{name_from} has {card}, which will go to {name_to}',
+            u'{card} will go from {name_from} to {name_to}'
+        ],
+        'transaction_cta': u'Talk to them to arrange when to meet',
         'transaction_finished': u'The transaction has been finished',
         'transaction_canceled': u'The transaction has been canceled',
         'ask_sticker': [
@@ -92,6 +108,22 @@ langs = {
             u'Tienes una nueva oportunidad de intercambio!'
             u'Prepárate, un nuevo intercambio está en camino'
         ],
+        'transaction_line_from_you': [
+            u'Tú le darías {card} a {name_to}',
+            u'Tú tienes {card}, que iría para {name_to}',
+            u'{card} iría de ti a {name_to}'
+        ],
+        'transaction_line_to_you': [
+            u'{name_from} te va a dar {card} a ti',
+            u'{name_from} tiene {card}, que va a ir para ti',
+            u'{card} va a ir de {name_from} a ti'
+        ],
+        'transaction_line': [
+            u'{name_from} le va a dar {card} a {name_to}',
+            u'{name_from} tiene {card}, que va a ir para {name_to}',
+            u'{card} va a ir de {name_from} a {name_to}'
+        ],
+        'transaction_cta': u'Habla con ellos para arreglar cuando juntarse',
         'transaction_finished': u'La transacción ha sido finalizada',
         'transaction_canceled': u'La transacción ha sido canceleda',
         'ask_sticker': [

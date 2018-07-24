@@ -27,7 +27,7 @@ def cta(t):
         'quick_replies': [pill(t, 'trades'), pill(t, 'stickers'), pill(t, 'wishlist')]
     }
 
-def new_trade(t):
+def new_trade(t, transaction_id, desc):
     return [
         {'text': t('new_transaction')},
         {'attachment': {
@@ -36,7 +36,9 @@ def new_trade(t):
                 'url': BASE_URL + 'public/new_trade.gif',
             }
         }}
-    ]
+    ] + [{'text': desc_line} for line in desc] + [{'text': t('transaction_cta'), 'quick_replies': [
+        pill(t, 'talk', {'id': transaction_id})
+    ]}]
 
 def show_collection(t, collection):
     if not collection:
