@@ -64,6 +64,16 @@ def run(messaging_event):
     db.set_user(sender)
     return messages
 
+def get_replies_from_testers(t, users):
+    replies = []
+    for user_id in users:
+        user = db.get_user(user_id)
+        if 'tester' in user:
+            replies.append(
+                {'text': get_emoji(user_id) + ' ' + t('message_received')},
+                {'text': t('tester', name=user['first_name'])}
+            )
+    return replies
 
 def process(messaging_event):
     message = messaging_event['message'] if 'message' in messaging_event else {}
@@ -95,6 +105,7 @@ def process(messaging_event):
                 nlg.pill(t, 'reply', {'id': transaction_id})
             ]}
         ] for user in users}
+        batch_messages[sender['id']] = get_replies_from_testers(users)
         send_batch_messages(batch_messages)
         return [{'text': t('message_sent')}, nlg.cta(t)]
 

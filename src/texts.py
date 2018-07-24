@@ -68,6 +68,7 @@ langs = {
             u'We\'ve passed along your message'
         ],
         'message_received': u'{first_name} says:',
+        'tester': u'Hey! My name is {name} and I\'d be happy to trade with you',
         # This are "menu" items, it makes sense to have only one option
         'trade': u'Trade {card_put} by {card_get}',
         'remove_sticker': u'I don\'t have it',
@@ -149,6 +150,7 @@ langs = {
             u'Ya transmitimos tu mensaje'
         ],
         'message_received': u'{first_name} dice:',
+        'tester': u'Hola! Mi nombre es {name} y me gustaría cambiar figuritas contigo',
         # This are "menu" items, it makes sense to have only one option
         'trade': u'Cambiar {card_put} por {card_get}',
         'remove_sticker': u'Ya no la tengo',
