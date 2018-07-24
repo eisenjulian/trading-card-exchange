@@ -69,10 +69,10 @@ def get_replies_from_testers(t, users):
     for user_id in users:
         user = db.get_user(user_id)
         if 'tester' in user:
-            replies.append(
+            replies.extend([
                 {'text': get_emoji(user_id) + ' ' + t('message_received')},
                 {'text': t('tester', name=user['first_name'])}
-            )
+            ])
     return replies
 
 def process(messaging_event):
