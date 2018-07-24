@@ -144,7 +144,7 @@ def get_transaction_desc(t, cycle, user, all_users):
     return [
         t(
             'transaction_line' + 
-            '_from_you' if cycle[i - 3] == user['id'] else ('_to_you' if cycle[i - 1] == user['id'] else ''), 
+            ('_from_you' if cycle[i - 3] == user['id'] else ('_to_you' if cycle[i - 1] == user['id'] else '')), 
             name_from=get_user_name(i - 3), 
             name_to=get_user_name(i - 1), 
             card=utils.cards.get(cycle[i - 2], {}).get('name', cycle[i - 2])
