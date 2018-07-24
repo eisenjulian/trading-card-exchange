@@ -41,7 +41,7 @@ langs = {
             u'{name_from} has {card}, which will go to {name_to}',
             u'{card} will go from {name_from} to {name_to}'
         ],
-        'transaction_cta': u'Talk to them to arrange when to meet',
+        'transaction_cta': u'You can now talk to arrange when to meet',
         'transaction_finished': u'The transaction has been finished',
         'transaction_canceled': u'The transaction has been canceled',
         'ask_sticker': [
@@ -123,7 +123,7 @@ langs = {
             u'{name_from} tiene {card}, que va a ir para {name_to}',
             u'{card} va a ir de {name_from} a {name_to}'
         ],
-        'transaction_cta': u'Habla con ellos para arreglar cuando juntarse',
+        'transaction_cta': u'Pueden hablar para arreglar cuando juntarse',
         'transaction_finished': u'La transacción ha sido finalizada',
         'transaction_canceled': u'La transacción ha sido canceleda',
         'ask_sticker': [
