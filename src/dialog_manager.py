@@ -105,7 +105,7 @@ def process(messaging_event):
                 nlg.pill(t, 'reply', {'id': transaction_id})
             ]}
         ] for user in users}
-        batch_messages[sender['id']] = get_replies_from_testers(users)
+        batch_messages[sender['id']] = get_replies_from_testers(t, users)
         send_batch_messages(batch_messages)
         return [{'text': t('message_sent')}, nlg.cta(t)]
 
