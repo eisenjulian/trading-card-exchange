@@ -39,6 +39,8 @@ def webhook(request):
     if data["object"] == "page":
         for entry in data["entry"]:
             for messaging_event in entry["messaging"]:
+                if messaging_event.get("message", {}).get('is_echo'):
+                    continue
                 # someone sent us a message or clicked/tapped "postback" button
                 if messaging_event.get("message") or messaging_event.get("postback"): 
                     try:
