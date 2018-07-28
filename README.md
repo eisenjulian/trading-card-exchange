@@ -1,6 +1,8 @@
 # Swapr
 
-This is a messenger bot for aiding trading communities. The first version specializes in trading world cup collectible cards.
+This is a messenger bot for aiding trading communities. You have something somebody wants. You want something somebody has. We use AI to help you meet and swap in the real world.
+
+The first version specializes in trading world cup collectible cards.
 
 ## What can I do?
 
@@ -24,6 +26,7 @@ An user can be part of many trading circles. That's why we have the concept of t
 their active transactions. The user only sees which card has to give in and which card has to leave when running the trade.
 Users can confirm or cancel a transaction. If any user cancels the transaction, it becomes obsolete and then we would cancel it
 for all users. If all users confirm the transaction, then we mark it as done and we move on to find more transactions.
+We also have very basic messaging capabilities for the group related to the transaction.
 
 The bot is available in English and Spanish.
 
@@ -37,7 +40,7 @@ when the user wants the card. Cycles in this graph represent trading opportuniti
 We use networkx to represent graphs and also to compute the cycles.
 
 ## Testing
-Please reach out to @eisenjulian or @quimey
+Please reach out to @eisenjulian or @quimey for tester access to the app.
 
 ## Contributing
 Please reach out to @eisenjulian or @quimey

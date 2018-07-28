@@ -64,15 +64,19 @@ def run(messaging_event):
     db.set_user(sender)
     return messages
 
-def get_replies_from_testers(t, users):
+def get_replies_from_testers(t, users, transaction_id):
     replies = []
     for user_id in users:
         user = db.get_user(user_id)
         if 'tester' in user:
             replies.extend([
-                {'text': get_emoji(user_id) + ' ' + t('message_received')},
+                {'text': get_emoji(user_id) + ' ' + t('message_received', name=user['first_name'])},
                 {'text': t('tester', name=user['first_name'])}
             ])
+    if replies:
+        replies[-1]['quick_replies'] = [
+            nlg.pill(t, 'reply', {'id': transaction_id})
+        ]
     return replies
 
 def process(messaging_event):
@@ -100,13 +104,17 @@ def process(messaging_event):
         transaction = db.get_transaction(transaction_id)
         users = [user for user in transaction['cycle'] if user != sender['id'] and db.is_user(user)]
         batch_messages = {user: [
-            {'text': get_emoji(sender['id']) + ' ' + t('message_received')},
+            {'text': get_emoji(sender['id']) + ' ' + t('message_received', name=sender['first_name'])},
             {'text': message_text, 'quick_replies': [
                 nlg.pill(t, 'reply', {'id': transaction_id})
             ]}
         ] for user in users}
-        batch_messages[sender['id']] = get_replies_from_testers(t, users)
         send_batch_messages(batch_messages)
+        # Only for mock users interaction and testing
+        replies = get_replies_from_testers(t, users, transaction_id)
+        if replies:
+            return [{'text': t('message_sent')}] + replies
+        #############################################
         return [{'text': t('message_sent')}, nlg.cta(t)]
 
     elif intent == 'menu':
