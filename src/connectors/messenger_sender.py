@@ -18,6 +18,7 @@ def send_batch_messages(messages):
                 })
                 r = requests.post("https://graph.facebook.com/v3.0/me/messages", params=params, headers=headers, data=data)
                 if r.status_code != 200:
+                    log('Problems sending batch messages')
                     log(r.status_code)
                     log(r.text)
         except Exception:
@@ -35,6 +36,7 @@ def send_messages(recipient, messages):
         r = requests.post("https://graph.facebook.com/v3.0/me/messages", params=params, headers=headers, data=data)
         time.sleep(1)
         if r.status_code != 200:
+            log('Problems sending action')
             log(r.status_code)
             log(r.text)
 
@@ -44,5 +46,6 @@ def send_messages(recipient, messages):
         })
         r = requests.post("https://graph.facebook.com/v3.0/me/messages", params=params, headers=headers, data=data)
         if r.status_code != 200:
+            log('Problems sending message')
             log(r.status_code)
             log(r.text)

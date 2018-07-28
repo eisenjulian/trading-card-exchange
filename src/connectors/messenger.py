@@ -12,6 +12,7 @@ def get_profile_data(user_id):
         url = "https://graph.facebook.com/v3.0/{user_id}?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token={token}".format(user_id=user_id, token=os.environ["PAGE_ACCESS_TOKEN"])
         r = requests.get(url)
         if r.status_code != 200:
+            log('Problems getting profile data')
             log(r.status_code)
             log(r.text)
             return {'id': user_id}
