@@ -6,6 +6,8 @@ import database as db
 import nlg
 import matching
 import json
+import datetime
+import pytz
 from src.connectors import messenger_sender
 
 def get_entities(message, postback, name):
@@ -60,7 +62,11 @@ def send_batch_messages(messages):
 def run(messaging_event):
     sender = messaging_event['sender_data']
     sender.update(db.get_user(sender['id']))
+    if not sender.get('creation_time'):
+        sender['creation_time'] = datetime.datetime.now(pytz.utc).isoformat()
     messages = process(messaging_event)
+    sender['spoke'] = True
+    sender['last_update_time'] = datetime.datetime.now(pytz.utc).isoformat()
     db.set_user(sender)
     return messages
 
@@ -93,7 +99,7 @@ def process(messaging_event):
     intent = get_intent(message, postback)
     cards = get_card_ids(message, postback)
 
-    if intent == 'start':
+    if intent == 'start' or not sender.get('spoke'):
         return [{
             'text': t('welcome'),
             'quick_replies': [nlg.pill(t, 'add_sticker'), nlg.pill(t, 'add_wishlist')]
